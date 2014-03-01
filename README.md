@@ -1,4 +1,1 @@
-imgur-scraper
-=============
-
-Scrapes imgur database for analysis
+Scrapes imgur for comments and points
