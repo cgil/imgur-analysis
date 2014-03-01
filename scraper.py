@@ -10,6 +10,8 @@ def main():
 		print "**** Started inserting Page #",i
 		storeImgurHit(page)
 		print "**** Finished inserting Page #",i
+		with open("log.txt", "w") as myfile:
+			myfile.write("Last page scraped: #"+str(i)+"\n")
 		
 def storeImgurHit(page):
 	if page and page['success'] is True:
