@@ -3,17 +3,16 @@ import json
 from pymongo import MongoClient
 
 def main():
-	for i in xrange(1,1155):
+	for i in xrange(649,1155):
 		page = getImgurPage(i)
 		if not page:
 			continue
 		print "**** Started inserting Page #",i
-		storeImgurHit(page)
+		storeImgurHit(page, i)
 		print "**** Finished inserting Page #",i
-		with open("log.txt", "w") as myfile:
-			myfile.write("Last page scraped: #"+str(i)+"\n")
+		log("Scraped page #"+str(i)+"\n")
 		
-def storeImgurHit(page):
+def storeImgurHit(page, num):
 	if page and page['success'] is True:
 		for p in page['data']:
 			try:
@@ -23,6 +22,7 @@ def storeImgurHit(page):
 				print "Inserted hit #",hits.count()
 			except:
 				"@@@@@@@@@ Error: Failed to insert a hit"
+				log("Error: Failed to insert a hit from page #"+str(num)+"\n")
 				continue
 
 def getImgurPage(page):	# 1154 = max = Jan 2, 2011
@@ -32,7 +32,12 @@ def getImgurPage(page):	# 1154 = max = Jan 2, 2011
 		return json.load(galleryResp)  
 	except:
 		print "@@@@@@@@@ Error: Failed to load Page #", page
+		log("Error: Failed to load Page #"+str(page)+"\n")
 		return False
+
+def log(message):
+	with open("log.txt", "a") as myfile:
+		myfile.write(message)
 
 client = MongoClient()
 db = client.imgur
