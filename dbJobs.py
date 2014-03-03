@@ -2,10 +2,17 @@ from pymongo import MongoClient
 from pprint import pprint
 import datetime
 from bson.objectid import ObjectId
+import os
 
 def main():
-	for hit in hits.find():
-		log("+Starting _id: " + str(hit['_id']))
+	foundHits = hits.find()
+	done = 0
+	foundCount = foundHits.count()
+	for hit in foundHits:
+		done += 1
+		pctDone = ((done*100)/foundCount)
+		log("+Starting _id: " + str(hit['_id']) + " " + str(pctDone) + "% done")
+		pprint("+Starting _id: " + str(hit['_id']) + str(pctDone) + "% done")	
 		try:
 			new = formatTimeStamp(hit['data']['image']['timestamp'])
 			if new is not None:
@@ -66,8 +73,15 @@ def showHits():
 		pprint(old)
 
 def log(message):
-	with open("log.txt", "a") as myfile:
-		myfile.write(message+"\n")
+	#	Only keep last 20mb of logs, trash the rest
+	size = os.stat('log.txt').st_size
+	if size > 20485760:
+		with open("log.txt", "w") as myfile:
+			myfile.write(message+"\n")
+	else:
+		with open("log.txt", "a") as myfile:
+			myfile.write(message+"\n")
+
 		
 
 client = MongoClient()
