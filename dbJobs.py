@@ -40,7 +40,7 @@ def main():
 					pass
 		except:
 			log("***Error: Could not process _id: " + str(hit['_id']))
-			pass
+			continue
 		log("-Finished _id: " + str(hit['_id']))
 
 
@@ -67,7 +67,7 @@ def showHits():
 
 def log(message):
 	with open("log.txt", "a") as myfile:
-		myfile.write(message)
+		myfile.write(message+"\n")
 		
 
 client = MongoClient()
