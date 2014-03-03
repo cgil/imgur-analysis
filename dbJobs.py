@@ -72,7 +72,7 @@ def log(message):
 
 client = MongoClient()
 db = client.imgur
-hits = db.testHits
+hits = db.hits
 main()
 
 
