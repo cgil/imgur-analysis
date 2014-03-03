@@ -12,7 +12,7 @@ def main():
 		done += 1
 		pctDone = ((done*100)/foundCount)
 		log("+Starting _id: " + str(hit['_id']) + " " + str(pctDone) + "% done")
-		pprint("+Starting _id: " + str(hit['_id']) + str(pctDone) + "% done")	
+		pprint("+Starting _id: " + str(hit['_id']) + " " + str(pctDone) + "% done")	
 		try:
 			new = formatTimeStamp(hit['data']['image']['timestamp'])
 			if new is not None:
@@ -48,7 +48,8 @@ def main():
 		except:
 			log("***Error: Could not process _id: " + str(hit['_id']))
 			continue
-		log("-Finished _id: " + str(hit['_id']))
+		log("-Finished _id: " + str(hit['_id']) + " " + str(pctDone) + "% done")
+		pprint("-Finished _id: " + str(hit['_id']) + " " + str(pctDone) + "% done")	
 
 
 def findHit():
