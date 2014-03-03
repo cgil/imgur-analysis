@@ -9,18 +9,25 @@ def main():
 		{
 			'$project' : {
 				'timestamp' : '$data.image.timestamp', 
-				'hour' : { '$hour' : '$data.image.timestamp' }
+				'hours' : { '$hour' : '$data.image.timestamp' }
 			}
 		}
-		# ,
-		# { 
-		# 	'$group' : { 
-		# 		'_id': { 'hour' : 1 }, 
-		# 		'count' : { '$sum' : 1 }
-		# 	} 
-		# }
+		,
+		{ 
+			'$group' : { 
+				'_id': { 'hour' : '$hours' }, 
+				'count' : { '$sum' : 1 }
+			} 
+		}
+		,
+		{
+			'$sort' : {
+				'_id.hour' : 1
+			}
+		}
 	])
 	pprint(aggr)
+	db.hourAggr.insert(aggr['result'])
 
 
 client = MongoClient()
