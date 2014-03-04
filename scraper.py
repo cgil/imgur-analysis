@@ -1,13 +1,17 @@
 import urllib2
 import json
 from pymongo import MongoClient
+import aggregator
+from pprint import pprint
+from collections import Counter
+import datetime
 
 #	Runs backwards through imgur gallery pulling every gallery page
 #	Using gallery page pulls every image 'hit.json' with all available information for that image post including comments
 #	Stores hit data into a setup mongodb collection: imgur.hits
 
-#	Main loop runs through 1155 pages (one page per day of existance)
-def main():
+#	Stores imgur data - loop runs through 1154 pages (one page per day of existance)
+def storeImgurData():
 	for i in xrange(1,1155):
 		page = getImgurPage(i)
 		if not page:
@@ -15,39 +19,85 @@ def main():
 		print "**** Started inserting Page #",i
 		storeImgurHit(page, i)
 		print "**** Finished inserting Page #",i
-		log("Scraped page #"+str(i)+"\n")
+		log("Scraped page #"+str(i))
 		
 #	Loads and stores a hit to mongo
 def storeImgurHit(page, num):
-	if page and page['success'] is True:
-		for p in page['data']:
-			try:
-				hitResp = urllib2.urlopen('http://imgur.com/gallery/'+ p['hash'] + '/comment/best/hit.json')
-				hitData = json.load(hitResp) 
-				hits.insert(hitData)
-				print "Inserted hit #",hits.count()
-			except:
-				"@@@@@@@@@ Error: Failed to insert a hit"
-				log("Error: Failed to insert a hit from page #"+str(num)+"\n")
-				continue
+	hits = db.testHits
+	for p in page:
+		try:
+			hitResp = urllib2.urlopen('http://imgur.com/gallery/'+ p['hash'] + '/comment/best/hit.json')
+			hitData = json.load(hitResp) 
+			hits.insert(hitData)
+			print "Inserted hit #",hits.count()
+		except:
+			print "@@@@@@@@@ Error: Failed to insert a hit"
+			log("Error: Failed to insert a hit from page #"+str(num))
+			continue
 
 #	Loads a page from imgur
 def getImgurPage(page):	# 1154 = max = Jan 2, 2011
 	try:
 		daysAgo = str(page)	# 1 = today, 2 = yesterday...
 		galleryResp = urllib2.urlopen('http://imgur.com/gallery/hot/viral/page/' + daysAgo + '/hit.json')
-		return json.load(galleryResp)  
+		return json.load(galleryResp)['data']
 	except:
 		print "@@@@@@@@@ Error: Failed to load Page #", page
-		log("Error: Failed to load Page #"+str(page)+"\n")
+		log("Error: Failed to load Page #"+str(page))
+		return False
+
+#	Loads a hit from a page
+def getImgurHit(hash):
+	try:
+		hitResp = urllib2.urlopen('http://imgur.com/gallery/'+ hash + '/comment/best/hit.json')
+		return json.load(hitResp)['data']
+	except:
+		pprint("Error: Failed to load hit: " + hash)
+		log("Error: Failed to load hit: " + hash)
 		return False
 
 #	Simple error logging to log.txt file
 def log(message):
 	with open("log.txt", "a") as myfile:
-		myfile.write(message)
+		myfile.write(message+"\n")
 
+#	Insert data to given collection
+def insertData(data, collection):
+	collection.insert(data)
+
+#	Aggregate data from ingur from start to end date
+def aggregateData(start=1, end=1154):
+	startTimer = datetime.datetime.now()
+
+	hodCnt = Counter()		#	hour of day	counter
+	monthCnt = Counter()	#	month counter
+	yearCnt = Counter()		#	year counter
+	weekdayCnt = Counter()	#	day of week counter
+
+	capHodCnt = Counter()	#	captions hour of dat counter
+
+	for i in xrange(start, end+1):
+		page = getImgurPage(i)
+		if not page:
+			continue
+		for p in page:
+			hit = getImgurHit(p['hash'])
+			hodCnt = aggregator.timeOperator(hodCnt, hit, ['image','timestamp'], 'hour')
+			weekdayCnt = aggregator.timeOperator(weekdayCnt, hit, ['image','timestamp'], 'weekday')
+			monthCnt = aggregator.timeOperator(monthCnt, hit, ['image','timestamp'], 'month')
+			yearCnt = aggregator.timeOperator(yearCnt, hit, ['image','timestamp'], 'year')
+			for cap in hit['captions']:
+				capHodCnt = aggregator.timeOperator(capHodCnt, cap, ['datetime'], 'hour')
+	timeDiff = datetime.datetime.now() - startTimer
+	pprint(timeDiff.seconds)
+
+#	Open mongo client and db
 client = MongoClient()
 db = client.imgur
-hits = db.hits
-main()
+
+#	Run program
+aggregateData(1,1)
+
+
+
+
