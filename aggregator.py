@@ -4,8 +4,7 @@ import sys
 #	Aggregates and processes mongodb data to later use in visualizations and graphs
 
 class Snapshot(object):
-	def __init__(self, index):
-		self.index 		= index
+	def __init__(self):
 		self.counter 	= 0
 		self.ups 		= 0
 		self.downs 		= 0
