@@ -18,12 +18,6 @@ class Snapshot(object):
 		self.downs 		+= num(data['downs'], 'int')
 		self.points 	+= num(data['points'], 'int')
 
-	def __repr__(self):
-		return vars(self)
-
-	def __str__(self):
-		return vars(self)
-
 class ImageShot(Snapshot):
 	def __init__(self):
 		super(ImageShot, self).__init__(self)
