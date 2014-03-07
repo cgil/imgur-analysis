@@ -1,5 +1,7 @@
 import datetime
 import math
+from pprint import pprint
+import sys
 #	Aggregates and processes mongodb data to later use in visualizations and graphs
 
 class Snapshot(object):
@@ -11,10 +13,16 @@ class Snapshot(object):
 		self.points 	= 0
 
 	def update(self, data):
-		self.counter += 1
-		self.ups += data['ups']
-		self.downs += data['downs']
-		self.points += data['points']
+		self.counter 	+= 1
+		self.ups 		+= num(data['ups'], 'int')
+		self.downs 		+= num(data['downs'], 'int')
+		self.points 	+= num(data['points'], 'int')
+
+	def __repr__(self):
+		return vars(self)
+
+	def __str__(self):
+		return vars(self)
 
 class ImageShot(Snapshot):
 	def __init__(self):
@@ -30,15 +38,16 @@ class ImageShot(Snapshot):
 	def update(self, data):
 		super(ImageShot, self).update(data)
 
-		self.startingScore += data['starting_score']
-		self.score += data['score']
-		self.virality += data['virality']
-		self.views += data['views']
-		if data['animated']:
+		self.startingScore 	+= num(data['starting_score'], 'int')
+		self.score 			+= num(data['score'], 'int')
+		self.virality 		+= num(data['virality'], 'float')
+		self.views 			+= num(data['views'], 'int')
+
+		if 'animated' in data and data['animated']:
 			self.animated += 1
-		if data['nsfw']:
+		if 'nsfw' in data and data['nsfw']:
 			self.nsfw += 1
-		if data['reddit']:
+		if 'reddit' in data and data['reddit']:
 			self.reddit += 1
 
 
@@ -48,11 +57,11 @@ class CaptionShot(Snapshot):
 		self.bestScore 	= 0
 
 	def update(self, data):
-		self.counter += 1
-		self.ups += int(data['ups'])
-		self.downs += int(data['downs'])
-		self.points += int(data['points'])
-		self.bestScore += float(data['best_score'])
+		self.counter 		+= 1
+		self.ups 			+= num(data['ups'], 'int')
+		self.downs 			+= num(data['downs'], 'int')
+		self.points 		+= num(data['points'], 'int')
+		self.bestScore 		+= num(data['best_score'], 'float')
 
 
 class Aggregator(object):
@@ -67,23 +76,24 @@ class Aggregator(object):
 	def updateSnapshots(self, data):
 		try:
 			time = self.getTimestamp(data)
-			if self.hour[time.hour]:
+			if time.hour in self.hour:
 				self.hour[time.hour].update(data)
 			else:
 				self.hour[time.hour] = self.__initSnapshot(data)
-			if self.weekday[time.weekday()]:
+			if time.weekday() in self.weekday:
 				self.weekday[time.weekday()].update(data)
 			else:
 				self.weekday[time.weekday()] = self.__initSnapshot(data)
-			if self.month[time.month]:
+			if time.month in self.month:
 				self.month[time.month].update(data)
 			else:
 				self.month[time.month] = self.__initSnapshot(data)
-			if self.year[time.year]:
+			if time.year in self.year:
 				self.year[time.year].update(data)
 			else:
 				self.year[time.year] = self.__initSnapshot(data)
 		except:
+			print 'Error in updateSnapshots' + sys.exc_info()[0]
 			pass
 
 	def __initSnapshot(self, data):
@@ -96,10 +106,13 @@ class Aggregator(object):
 
 	def updateDeltas(self, data, timeDelta):
 		minutes = timeDelta.total_seconds() / 60
-		index = int(math.floor(minutes / 30))
+		try:
+			index = num(math.floor(minutes / 30), 'int')
+		except:	#	Errors: index -1
+			index = -1
 		if index > 47:	# 24 hours+ grouped together
 			index = 47
-		if self.delta[index]:
+		if index in self.delta:
 			self.delta[index].update(data)
 		else:
 			self.delta[index] = self.__initSnapshot(data)
@@ -110,6 +123,19 @@ class Aggregator(object):
 			return formatTimestamp(data['timestamp'])
 		else:
 			return formatTimestamp(data['datetime'])
+
+#	Convert to int or float: return 0 on failure
+def num(s, nType):
+	if nType == 'int':
+	    try:
+	        return int(s)
+	    except:
+	        return 0
+	else:
+		try:
+			return float(s)
+		except:
+			return 0
 
 
 #	Format string timestamp to datetime
