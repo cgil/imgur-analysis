@@ -3,7 +3,6 @@ import json
 from pymongo import MongoClient
 import aggregator
 from pprint import pprint
-from collections import Counter
 import datetime
 
 #	Runs backwards through imgur gallery pulling every gallery page
@@ -69,12 +68,8 @@ def insertData(data, collection):
 def aggregateData(start=1, end=1154):
 	startTimer = datetime.datetime.now()
 
-	hodCnt = Counter()		#	hour of day	counter
-	monthCnt = Counter()	#	month counter
-	yearCnt = Counter()		#	year counter
-	weekdayCnt = Counter()	#	day of week counter
-
-	capHodCnt = Counter()	#	captions hour of dat counter
+	imgCounter = aggregator.Aggregator()
+	capCounter = aggregator.Aggregator()
 
 	for i in xrange(start, end+1):
 		page = getImgurPage(i)
@@ -82,12 +77,17 @@ def aggregateData(start=1, end=1154):
 			continue
 		for p in page:
 			hit = getImgurHit(p['hash'])
-			hodCnt = aggregator.timeOperator(hodCnt, hit, ['image','timestamp'], 'hour')
-			weekdayCnt = aggregator.timeOperator(weekdayCnt, hit, ['image','timestamp'], 'weekday')
-			monthCnt = aggregator.timeOperator(monthCnt, hit, ['image','timestamp'], 'month')
-			yearCnt = aggregator.timeOperator(yearCnt, hit, ['image','timestamp'], 'year')
+			#	--time
+			imgDatetime = aggregator.findDatetime(hit, ['image', 'timestamp'])
+			imgCounter.updateTimers(imgDatetime)
+			imgCounter.updateSnapshot()
 			for cap in hit['captions']:
-				capHodCnt = aggregator.timeOperator(capHodCnt, cap, ['datetime'], 'hour')
+				#	--time
+				capDatetime = aggregator.findDatetime(cap, ['datetime'])
+				capCounter.updateTimers(capDatetime)
+				capCounter.updateDeltas(capDatetime-imgDatetime)
+
+	pprint(vars(capCounter))
 	timeDiff = datetime.datetime.now() - startTimer
 	pprint(timeDiff.seconds)
 
