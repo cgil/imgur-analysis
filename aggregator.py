@@ -93,8 +93,8 @@ class Aggregator(object):
 		snap.update(data)
 		return snap
 
-	def updateDeltas(self, data, delta):
-		minutes = delta.total_seconds() / 60
+	def updateDeltas(self, data, timeDelta):
+		minutes = timeDelta.total_seconds() / 60
 		index = minutes / 30
 		if index > 47:	# 24 hours+ grouped together
 			index = 47

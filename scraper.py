@@ -68,8 +68,8 @@ def insertData(data, collection):
 def aggregateData(start=1, end=1154):
 	startTimer = datetime.datetime.now()
 
-	imgCounter = aggregator.Aggregator()
-	capCounter = aggregator.Aggregator()
+	imgCounter = aggregator.Aggregator('image')
+	capCounter = aggregator.Aggregator('captions')
 
 	for i in xrange(start, end+1):
 		page = getImgurPage(i)
@@ -79,13 +79,12 @@ def aggregateData(start=1, end=1154):
 			hit = getImgurHit(p['hash'])
 			#	--time
 			imgDatetime = aggregator.findDatetime(hit, ['image', 'timestamp'])
-			imgCounter.updateTimers(imgDatetime)
-			imgCounter.updateSnapshot()
+			imgCounter.updateSnapshots(hit['image'])
 			for cap in hit['captions']:
 				#	--time
 				capDatetime = aggregator.findDatetime(cap, ['datetime'])
-				capCounter.updateTimers(capDatetime)
-				capCounter.updateDeltas(capDatetime-imgDatetime)
+				capCounter.updateSnapshots(cap)
+				capCounter.updateDeltas(cap, capDatetime-imgDatetime)
 
 	pprint(vars(capCounter))
 	timeDiff = datetime.datetime.now() - startTimer
