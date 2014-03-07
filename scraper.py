@@ -79,7 +79,7 @@ def aggregateData(start=1, end=1154):
 		for p in page:
 			hit = getImgurHit(p['hash'])
 			if not hit:
-				log('Could not load hit with hash: ' + p['hash'] + ' in page #' + str(i))
+				log('Could not load hit with hash: ' + str(p['hash']) + ' in page #' + str(i))
 				continue
 			#	--time
 			imgDatetime = aggregator.findDatetime(hit, ['image', 'timestamp'])
@@ -93,7 +93,7 @@ def aggregateData(start=1, end=1154):
 						timeDelta = capDatetime-imgDatetime
 						capCounter.updateDeltas(cap, timeDelta)
 					except:
-						log('Could not update Deltas for caption with page ' + str(i) +' hash: ' + cap['hash'] + ' id: ' + cap['id'])
+						log('Could not update Deltas for caption with page ' + str(i) +' hash: ' + str(cap['hash']) + ' id: ' + str(cap['id']))
 						pass
 
 	pprint(vars(capCounter))

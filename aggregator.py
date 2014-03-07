@@ -1,6 +1,5 @@
 import datetime
 import math
-from pprint import pprint
 import sys
 #	Aggregates and processes mongodb data to later use in visualizations and graphs
 
