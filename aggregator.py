@@ -96,7 +96,7 @@ class Aggregator(object):
 
 	def updateDeltas(self, data, timeDelta):
 		minutes = timeDelta.total_seconds() / 60
-		index = math.floor(minutes / 30)
+		index = int(math.floor(minutes / 30))
 		if index > 47:	# 24 hours+ grouped together
 			index = 47
 		if self.delta[index]:
