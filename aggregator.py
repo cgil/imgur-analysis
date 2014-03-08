@@ -2,7 +2,6 @@ import datetime
 import math
 import sys
 from pymongo import MongoClient
-from pprint import pprint
 
 #	Aggregates and processes mongodb data to later use in visualizations and graphs
 
@@ -102,7 +101,6 @@ class Aggregator(object):
 		except:
 			log('Error: Failed to updateSnapshots ' + str(sys.exc_info()[0]))
 			pass
-		self.__storeAll()
 
 	def updateDeltas(self, data, timeDelta):
 		minutes = timeDelta.total_seconds() / 60
@@ -132,7 +130,7 @@ class Aggregator(object):
 		snap.update(data)
 		return snap
 
-	def __storeAll(self):
+	def storeAll(self):
 		for k1, v1 in self.__dict__.iteritems():
 			try:
 				for k2, v2 in v1.iteritems():
@@ -187,6 +185,7 @@ def log(message):
 		with open('log.txt', 'a') as myfile:
 			myfile.write(message + ' - ' + str(datetime.now()) + '\n')
 	except:
+		print "Failed to log"
 		pass
 
 client = MongoClient()

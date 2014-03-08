@@ -60,6 +60,7 @@ def log(message):
 		with open('log.txt', 'a') as myfile:
 			myfile.write(message + ' - ' + str(datetime.now()) + '\n')
 	except:
+		print "Failed to log"
 		pass
 
 #	Insert data to given collection
@@ -98,6 +99,8 @@ def aggregateData(start=1, end=1154):
 						log('Could not update Deltas for caption with page ' + str(i) +' hash: ' + cap['hash'] + ' id: ' + cap['id'])
 						pass
 					break
+			imgCounter.storeAll()
+			capCounter.storeAll()
 
 	timeDiff = datetime.datetime.now() - startTimer
 	pprint(timeDiff.seconds)
