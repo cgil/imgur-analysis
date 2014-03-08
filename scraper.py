@@ -99,7 +99,7 @@ def aggregateData(start=1, end=1154):
 						log('Could not update Deltas for caption with page ' + str(i) +' hash: ' + cap['hash'] + ' id: ' + cap['id'])
 						pass
 
-	pprint(vars(capCounter))
+	capCounter.hour[1].store()
 	timeDiff = datetime.datetime.now() - startTimer
 	pprint(timeDiff.seconds)
 

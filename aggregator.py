@@ -1,10 +1,13 @@
 import datetime
 import math
 import sys
+import jsonpickle
+
 #	Aggregates and processes mongodb data to later use in visualizations and graphs
 
 class Snapshot(object):
-	def __init__(self):
+	def __init__(self, index):
+		self.index 		= index
 		self.counter 	= 0
 		self.ups 		= 0
 		self.downs 		= 0
@@ -16,9 +19,16 @@ class Snapshot(object):
 		self.downs 		+= num(data['downs'], 'int')
 		self.points 	+= num(data['points'], 'int')
 
+	def __toJSON(self):
+		return jsonpickle.encode(self)
+
+	def store(self):
+		print(self.__toJSON())
+		# db[index].save(__toJSON())
+
 class ImageShot(Snapshot):
-	def __init__(self):
-		super(ImageShot, self).__init__(self)
+	def __init__(self, index):
+		super(ImageShot, self).__init__(self, index)
 		self.startingScore 	= 0
 		self.score 			= 0
 		self.virality		= 0
@@ -44,8 +54,8 @@ class ImageShot(Snapshot):
 
 
 class CaptionShot(Snapshot):
-	def __init__(self):
-		super(CaptionShot, self).__init__(self)
+	def __init__(self, index):
+		super(CaptionShot, self).__init__(self, index)
 		self.bestScore 	= 0
 
 	def update(self, data):
@@ -71,28 +81,28 @@ class Aggregator(object):
 			if time.hour in self.hour:
 				self.hour[time.hour].update(data)
 			else:
-				self.hour[time.hour] = self.__initSnapshot(data)
+				self.hour[time.hour] = self.__initSnapshot(data, 'hour-' + time.hour)
 			if time.weekday() in self.weekday:
 				self.weekday[time.weekday()].update(data)
 			else:
-				self.weekday[time.weekday()] = self.__initSnapshot(data)
+				self.weekday[time.weekday()] = self.__initSnapshot(data, 'weekday-' + time.weekday())
 			if time.month in self.month:
 				self.month[time.month].update(data)
 			else:
-				self.month[time.month] = self.__initSnapshot(data)
+				self.month[time.month] = self.__initSnapshot(data, 'month-' + time.month)
 			if time.year in self.year:
 				self.year[time.year].update(data)
 			else:
-				self.year[time.year] = self.__initSnapshot(data)
+				self.year[time.year] = self.__initSnapshot(data, 'year-' + time.year)
 		except:
 			print 'Error in updateSnapshots' + sys.exc_info()[0]
 			pass
 
-	def __initSnapshot(self, data):
+	def __initSnapshot(self, data, index):
 		if self.stype == 'image':
-			snap = ImageShot()
+			snap = ImageShot(index)
 		else:
-			snap = CaptionShot()
+			snap = CaptionShot(index)
 		snap.update(data)
 		return snap
 
@@ -107,7 +117,7 @@ class Aggregator(object):
 		if index in self.delta:
 			self.delta[index].update(data)
 		else:
-			self.delta[index] = self.__initSnapshot(data)
+			self.delta[index] = self.__initSnapshot(data, 'delta-' + index)
 
 	#	Get the timestamp from given data
 	def getTimestamp(self, data):
