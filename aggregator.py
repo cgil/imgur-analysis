@@ -106,14 +106,13 @@ class Aggregator(object):
 		minutes = timeDelta.total_seconds() / 60
 		try:
 			index = num(math.floor(minutes / 30), 'int')
-		except:	#	Errors: index -1
-			index = -1
-		if index > 47:	# 24 hours+ grouped together
-			index = 47
-		if index in self.delta:
-			self.delta[index].update(data)
-		else:
-			self.delta[index] = self.__initSnapshot(data, 'delta' + str(index))
+		except:	
+			if index > 47:	# 24 hours+ grouped together
+				index = 47
+			if index in self.delta:
+				self.delta[index].update(data)
+			else:
+				self.delta[index] = self.__initSnapshot(data, 'delta' + str(index))
 
 	#	Get the timestamp from given data
 	def __getTimestamp(self, data):
