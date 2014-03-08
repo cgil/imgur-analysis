@@ -137,9 +137,9 @@ class Aggregator(object):
 					try:
 						v2.store()
 					except:
-						print v2
+						pass
 			except:
-				print k1
+				pass
 #	Convert to int or float: return 0 on failure
 def num(s, nType):
 	if nType == 'int':
