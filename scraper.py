@@ -11,27 +11,28 @@ import datetime
 
 #	Stores imgur data - loop runs through 1154 pages (one page per day of existance)
 def storeImgurData():
+	#Open mongo client and db
+	client = MongoClient()
+	db = client.imgur
 	for i in xrange(1,1155):
 		page = getImgurPage(i)
 		if not page:
 			continue
-		print "**** Started inserting Page #",i
-		storeImgurHit(page, i)
-		print "**** Finished inserting Page #",i
-		log("Scraped page #"+str(i))
+		print '**** Started inserting Page #', i
+		storeImgurHit(db, page, i)
+		print '**** Finished inserting Page #', i
+		log('Scraped page #' + str(i))
 		
 #	Loads and stores a hit to mongo
-def storeImgurHit(page, num):
+def storeImgurHit(db, page, num):
 	hits = db.testHits
 	for p in page:
 		try:
 			hitResp = urllib2.urlopen('http://imgur.com/gallery/'+ p['hash'] + '/comment/best/hit.json')
 			hitData = json.load(hitResp) 
 			hits.insert(hitData)
-			print "Inserted hit #",hits.count()
 		except:
-			print "@@@@@@@@@ Error: Failed to insert a hit"
-			log("Error: Failed to insert a hit from page #"+str(num))
+			log('Error: Failed to insert a hit from page #' + str(num))
 			continue
 
 #	Loads a page from imgur
@@ -41,25 +42,23 @@ def getImgurPage(page):	# 1154 = max = Jan 2, 2011
 		galleryResp = urllib2.urlopen('http://imgur.com/gallery/hot/viral/page/' + daysAgo + '/hit.json')
 		return json.load(galleryResp)['data']
 	except:
-		print "@@@@@@@@@ Error: Failed to load Page #", page
-		log("Error: Failed to load Page #"+str(page))
+		log('Error: Failed to load Page #' + str(page))
 		return False
 
 #	Loads a hit from a page
 def getImgurHit(hash):
 	try:
-		hitResp = urllib2.urlopen('http://imgur.com/gallery/'+ hash + '/comment/best/hit.json')
+		hitResp = urllib2.urlopen('http://imgur.com/gallery/' + hash + '/comment/best/hit.json')
 		return json.load(hitResp)['data']
 	except:
-		pprint("Error: Failed to load hit: " + hash)
-		log("Error: Failed to load hit: " + hash)
+		log('Error: Failed to load hit: ' + hash)
 		return False
 
 #	Simple error logging to log.txt file
 def log(message):
 	try:
-		with open("log.txt", "a") as myfile:
-			myfile.write(message+"\n")
+		with open('log.txt', 'a') as myfile:
+			myfile.write(message + ' - ' + str(datetime.now()) + '\n')
 	except:
 		pass
 
@@ -99,13 +98,8 @@ def aggregateData(start=1, end=1154):
 						log('Could not update Deltas for caption with page ' + str(i) +' hash: ' + cap['hash'] + ' id: ' + cap['id'])
 						pass
 
-	capCounter.hour[1].store()
 	timeDiff = datetime.datetime.now() - startTimer
 	pprint(timeDiff.seconds)
-
-#	Open mongo client and db
-client = MongoClient()
-db = client.imgur
 
 #	Run program
 aggregateData(1,1)
