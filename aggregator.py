@@ -3,8 +3,6 @@ import math
 import sys
 from pymongo import MongoClient
 from pprint import pprint
-import json
-import datetime
 
 #	Aggregates and processes mongodb data to later use in visualizations and graphs
 
@@ -77,11 +75,14 @@ class Aggregator(object):
 		self.weekday 	= {}
 		self.month 		= {}
 		self.year 		= {}	
-		self.delta 		= {}		
+		self.delta 		= {}	
+
+	# def __dir__(self):
+ #        return ['stype', 'hour', 'weekday', 'month', 'year', 'delta']	
 
 	def updateSnapshots(self, data):
 		try:
-			time = self.getTimestamp(data)
+			time = self.__getTimestamp(data)
 			if time.hour in self.hour:
 				self.hour[time.hour].update(data)
 			else:
@@ -101,14 +102,7 @@ class Aggregator(object):
 		except:
 			log('Error: Failed to updateSnapshots ' + str(sys.exc_info()[0]))
 			pass
-
-	def __initSnapshot(self, data, index):
-		if self.stype == 'image':
-			snap = ImageShot(index)
-		else:
-			snap = CaptionShot(index)
-		snap.update(data)
-		return snap
+		self.__storeAll()
 
 	def updateDeltas(self, data, timeDelta):
 		minutes = timeDelta.total_seconds() / 60
@@ -124,12 +118,30 @@ class Aggregator(object):
 			self.delta[index] = self.__initSnapshot(data, 'delta' + str(index))
 
 	#	Get the timestamp from given data
-	def getTimestamp(self, data):
+	def __getTimestamp(self, data):
 		if self.stype == 'image':
 			return formatTimestamp(data['timestamp'])
 		else:
 			return formatTimestamp(data['datetime'])
 
+	def __initSnapshot(self, data, index):
+		if self.stype == 'image':
+			snap = ImageShot(index)
+		else:
+			snap = CaptionShot(index)
+		snap.update(data)
+		return snap
+
+	def __storeAll(self):
+		for k1, v1 in self.__dict__.iteritems():
+			try:
+				for k2, v2 in v1.iteritems():
+					try:
+						v2.store()
+					except:
+						print v2
+			except:
+				print k1
 #	Convert to int or float: return 0 on failure
 def num(s, nType):
 	if nType == 'int':
