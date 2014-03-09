@@ -12,6 +12,7 @@ class Snapshot(object):
 		self.ups 		= 0
 		self.downs 		= 0
 		self.points 	= 0
+		self.shotType	= 'Snapshot'
 
 	def update(self, data):
 		self.counter 	+= 1
@@ -39,6 +40,7 @@ class ImageShot(Snapshot):
 		self.animated 		= 0
 		self.nsfw 			= 0
 		self.reddit 		= 0
+		self.shotType		= 'ImageShot'
 
 	def update(self, data):
 		self.startingScore 	+= num(data['starting_score'], 'int')
@@ -66,6 +68,20 @@ class CaptionShot(Snapshot):
 		self.downs 			+= num(data['downs'], 'int')
 		self.points 		+= num(data['points'], 'int')
 		self.bestScore 		+= num(data['best_score'], 'float')
+		self.shotType		= 'CaptionShot'
+
+class DeltaShot(Snapshot):
+	def __init__(self, index):
+		super(DeltaShot, self).__init__(index)
+		self.bestScore 	= 0
+
+	def update(self, data):
+		self.counter 		+= 1
+		self.ups 			+= num(data['ups'], 'int')
+		self.downs 			+= num(data['downs'], 'int')
+		self.points 		+= num(data['points'], 'int')
+		self.bestScore 		+= num(data['best_score'], 'float')
+		self.shotType		= 'DeltaShot'
 
 class Aggregator(object):
 	def __init__(self, stype):
@@ -103,13 +119,15 @@ class Aggregator(object):
 		minutes = timeDelta.total_seconds() / 60
 		try:
 			index = num(math.floor(minutes / 30), 'int')
-		except:	
 			if index > 47:	# 24 hours+ grouped together
 				index = 47
 			if index in self.delta:
 				self.delta[index].update(data)
 			else:
 				self.delta[index] = self.__initSnapshot(data, 'delta' + str(index))
+		except:	
+			logging.exception('Failed to updateDeltas')
+
 
 	#	Get the timestamp from given data
 	def __getTimestamp(self, data):
@@ -121,8 +139,10 @@ class Aggregator(object):
 	def __initSnapshot(self, data, index):
 		if self.stype == 'image':
 			snap = ImageShot(index)
-		else:
+		elif self.stype == 'captions':
 			snap = CaptionShot(index)
+		else:
+			snap = DeltaShot(index)
 		snap.update(data)
 		return snap
 
@@ -145,7 +165,7 @@ def num(s, nType):
 	        return 0
 	else:
 		try:
-			return float(s)
+			return round(float(s), 3)
 		except:
 			return 0
 

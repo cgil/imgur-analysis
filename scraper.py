@@ -4,34 +4,58 @@ from pymongo import MongoClient
 import aggregator
 import datetime
 import logging
+from pprint import pprint
 
 #	Runs backwards through imgur gallery pulling every gallery page
 #	Using gallery page pulls every image 'hit.json' with all available information for that image post including comments
-#	Stores hit data into a setup mongodb collection: imgur.hits
+#	Aggregates data into several collections
+
+# 	CURRENT PROBLEMS:
+#		num() in aggregator not correctly rounding to 2 decimal places: due to some floats 
+#			not being able to be represented correctly - low priority
+#		Pages/hits that failed to load 503- service not available take too 
+#			long to fail -shorten time to failure to speed up processes - low priority
+#		Mongo save() : db[self.index].save(self.__toJSON()) - in aggregator does not work as intended
+#			It's adding new entries instead of merging documents, due to timestamp?
+#			Fix or write map-reduce to manually join fields - high priority
+#		Multi threading needed? currently takes ~9 hours to finish. -low priority
 
 
 class Scraper(object):
 	def __init__(self):
 		self.imgCounter 	= aggregator.Aggregator('image')
 		self.capCounter 	= aggregator.Aggregator('captions')
+		self.deltaCounter 	= aggregator.Aggregator('delta')
 		self.failedPages 	= set()		#	Pages to retry
 
 	#	Aggregate data from ingur from start to end date
 	def processPages(self, start=1, end=1154):
 		startTimer = datetime.datetime.now()
 		for i in xrange(start, end+1):
+			logging.info('Started processing page ' + str(i))
 			self.aggregatePage(i)
+			try:
+				timeDiff = datetime.datetime.now() - startTimer
+				timeMsg = str(timeDiff.seconds/60) + ' minutes ' + str(timeDiff.seconds%60) + ' seconds'
+			except:
+				timeMsg = ''
+			logging.info('Finished processing page ' + str(i) + ' - Time so far: ' + timeMsg)
+
+		for i in self.failedPages:	#	Attempt to proccess failed pages 
+			logging.info('Started processing failed page ' + str(i))
+			self.aggregatePage(i)
+			logging.info('Finished processing failed page ' + str(i))
 
 		timeDiff = datetime.datetime.now() - startTimer
 		logging.info('Finished aggregator in ' + str(timeDiff.seconds) + ' seconds')
-		print('Finished aggregator in ' + str(timeDiff.seconds))
+		print('Finished Aggregator in ' + str(timeDiff.seconds))
 
 	def aggregatePage(self, num):
 		page = self.getImgurPage(num)
 		if not page:
 			logging.warning('Could not open page #' + str(num))
 			self.failedPages.add(num)
-			continue
+			return
 		for p in page:
 			hit = self.getImgurHit(p['hash'])
 			if not hit:
@@ -47,12 +71,13 @@ class Scraper(object):
 					self.capCounter.updateSnapshots(cap)
 					try:
 						timeDelta = capDatetime-imgDatetime
-						self.capCounter.updateDeltas(cap, timeDelta)
+						self.deltaCounter.updateDeltas(cap, timeDelta)
 					except:
 						logging.exception('Could not update Deltas for caption with page ' + str(num) +' hash: ' + cap['hash'] + ' id: ' + cap['id'])
 						pass
 		self.imgCounter.storeAll()
 		self.capCounter.storeAll()
+		self.deltaCounter.storeAll()
 
 	#	Loads a hit from a page
 	def getImgurHit(self, hash):
@@ -100,6 +125,18 @@ class Scraper(object):
 	#	Insert data to given collection
 	def insertData(self, data, collection):
 		collection.insert(data)
+
+def printCollection(col):
+	for i in col.find():
+		pprint(i)
+
+loggingFormat = '%(asctime)-15s %(levelname)s %(message)s'
+logging.basicConfig(filename='scraper.log', level=logging.DEBUG, format=loggingFormat, datefmt='%m-%d-%Y %H:%M:%S')
+
+
+# client = MongoClient()
+# db = client.imgur
+# pprint(printCollection(db.hour20))
 
 scraper = Scraper()
 scraper.processPages(1, 1)
