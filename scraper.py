@@ -62,6 +62,7 @@ def aggregateData(start=1, end=1154):
 
 	imgCounter = aggregator.Aggregator('image')
 	capCounter = aggregator.Aggregator('captions')
+	failedPages = []
 
 	for i in xrange(start, end+1):
 		page = getImgurPage(i)
@@ -91,8 +92,8 @@ def aggregateData(start=1, end=1154):
 			capCounter.storeAll()
 
 	timeDiff = datetime.datetime.now() - startTimer
-	logging.info('Finished aggregator in ' + timeDiff.seconds + ' seconds')
-	print(timeDiff.seconds)
+	logging.info('Finished aggregator in ' + str(timeDiff.seconds) + ' seconds')
+	print('Finished aggregator in ' + str(timeDiff.seconds))
 
 #	Run program
 aggregateData(1,1)

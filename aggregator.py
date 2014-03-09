@@ -76,9 +76,6 @@ class Aggregator(object):
 		self.year 		= {}	
 		self.delta 		= {}	
 
-	# def __dir__(self):
- #        return ['stype', 'hour', 'weekday', 'month', 'year', 'delta']	
-
 	def updateSnapshots(self, data):
 		try:
 			time = self.__getTimestamp(data)
