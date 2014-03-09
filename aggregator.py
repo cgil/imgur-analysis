@@ -1,7 +1,7 @@
 import datetime
 import math
-import sys
 from pymongo import MongoClient
+import logging
 
 #	Aggregates and processes mongodb data to later use in visualizations and graphs
 
@@ -26,7 +26,7 @@ class Snapshot(object):
 		try:
 			db[self.index].save(self.__toJSON())
 		except:
-			log('Error: Failed to store Snapshot: ' + str(self.index) + ' error- ' + str(sys.exc_info()[0]))
+			logging.exception('Failed to store Snapshot: ' + str(self.index))
 			pass
 
 class ImageShot(Snapshot):
@@ -99,7 +99,7 @@ class Aggregator(object):
 			else:
 				self.year[time.year] = self.__initSnapshot(data, 'year' + str(time.year))
 		except:
-			log('Error: Failed to updateSnapshots ' + str(sys.exc_info()[0]))
+			logging.exception('Failed to updateSnapshots')
 			pass
 
 	def updateDeltas(self, data, timeDelta):
@@ -178,14 +178,6 @@ def findDatetime(data, keys):
 	except:
 		return False
 
-#	Simple error logging to log.txt file
-def log(message):
-	try:
-		with open('log.txt', 'a') as myfile:
-			myfile.write(message + ' - ' + str(datetime.now()) + '\n')
-	except:
-		print "Failed to log"
-		pass
 
 client = MongoClient()
 db = client.imgur

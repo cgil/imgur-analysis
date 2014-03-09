@@ -2,8 +2,8 @@ import urllib2
 import json
 from pymongo import MongoClient
 import aggregator
-from pprint import pprint
 import datetime
+import logging
 
 #	Runs backwards through imgur gallery pulling every gallery page
 #	Using gallery page pulls every image 'hit.json' with all available information for that image post including comments
@@ -18,10 +18,8 @@ def storeImgurData():
 		page = getImgurPage(i)
 		if not page:
 			continue
-		print '**** Started inserting Page #', i
 		storeImgurHit(db, page, i)
-		print '**** Finished inserting Page #', i
-		log('Scraped page #' + str(i))
+		logging.info('Scraped page #' + str(i))
 		
 #	Loads and stores a hit to mongo
 def storeImgurHit(db, page, num):
@@ -32,7 +30,7 @@ def storeImgurHit(db, page, num):
 			hitData = json.load(hitResp) 
 			hits.insert(hitData)
 		except:
-			log('Error: Failed to insert a hit from page #' + str(num))
+			logging.exception('Failed to insert a hit from page #' + str(num))
 			continue
 
 #	Loads a page from imgur
@@ -42,7 +40,7 @@ def getImgurPage(page):	# 1154 = max = Jan 2, 2011
 		galleryResp = urllib2.urlopen('http://imgur.com/gallery/hot/viral/page/' + daysAgo + '/hit.json')
 		return json.load(galleryResp)['data']
 	except:
-		log('Error: Failed to load Page #' + str(page))
+		logging.exception('Failed to load Page #' + str(page))
 		return False
 
 #	Loads a hit from a page
@@ -51,17 +49,8 @@ def getImgurHit(hash):
 		hitResp = urllib2.urlopen('http://imgur.com/gallery/' + hash + '/comment/best/hit.json')
 		return json.load(hitResp)['data']
 	except:
-		log('Error: Failed to load hit: ' + hash)
+		logging.exception('Failed to load hit: ' + hash)
 		return False
-
-#	Simple error logging to log.txt file
-def log(message):
-	try:
-		with open('log.txt', 'a') as myfile:
-			myfile.write(message + ' - ' + str(datetime.now()) + '\n')
-	except:
-		print "Failed to log"
-		pass
 
 #	Insert data to given collection
 def insertData(data, collection):
@@ -77,12 +66,12 @@ def aggregateData(start=1, end=1154):
 	for i in xrange(start, end+1):
 		page = getImgurPage(i)
 		if not page:
-			log('Could not open page #' + str(i))
+			logging.warning('Could not open page #' + str(i))
 			continue
 		for p in page:
 			hit = getImgurHit(p['hash'])
 			if not hit:
-				log('Could not load hit with hash: ' + p['hash'] + ' in page #' + str(i))
+				logging.warning('Could not load hit with hash: ' + p['hash'] + ' in page #' + str(i))
 				continue
 			#	--time
 			imgDatetime = aggregator.findDatetime(hit, ['image', 'timestamp'])
@@ -96,14 +85,14 @@ def aggregateData(start=1, end=1154):
 						timeDelta = capDatetime-imgDatetime
 						capCounter.updateDeltas(cap, timeDelta)
 					except:
-						log('Could not update Deltas for caption with page ' + str(i) +' hash: ' + cap['hash'] + ' id: ' + cap['id'])
+						logging.exception('Could not update Deltas for caption with page ' + str(i) +' hash: ' + cap['hash'] + ' id: ' + cap['id'])
 						pass
-					break
 			imgCounter.storeAll()
 			capCounter.storeAll()
 
 	timeDiff = datetime.datetime.now() - startTimer
-	pprint(timeDiff.seconds)
+	logging.info('Finished aggregator in ' + timeDiff.seconds + ' seconds')
+	print(timeDiff.seconds)
 
 #	Run program
 aggregateData(1,1)
