@@ -11,13 +11,6 @@ from pprint import pprint
 #	Aggregates data into several collections
 
 # 	CURRENT PROBLEMS:
-#		num() in aggregator not correctly rounding to 2 decimal places: due to some floats 
-#			not being able to be represented correctly - low priority
-#		Pages/hits that failed to load 503- service not available take too 
-#			long to fail -shorten time to failure to speed up processes - low priority
-#		Mongo save() : db[self.index].save(self.__toJSON()) - in aggregator does not work as intended
-#			It's adding new entries instead of merging documents, due to timestamp?
-#			Fix or write map-reduce to manually join fields - high priority
 #		Multi threading needed? currently takes ~9 hours to finish. -low priority
 
 
@@ -82,7 +75,7 @@ class Scraper(object):
 	#	Loads a hit from a page
 	def getImgurHit(self, hash):
 		try:
-			hitResp = urllib2.urlopen('http://imgur.com/gallery/' + hash + '/comment/best/hit.json')
+			hitResp = urllib2.urlopen('http://imgur.com/gallery/' + hash + '/comment/best/hit.json', timeout = TIMEOUT)
 			return json.load(hitResp)['data']
 		except:
 			logging.exception('Failed to load hit: ' + hash)
@@ -92,7 +85,7 @@ class Scraper(object):
 	def getImgurPage(self, page):	# 1154 = max = Jan 2, 2011
 		try:
 			daysAgo = str(page)	# 1 = today, 2 = yesterday...
-			galleryResp = urllib2.urlopen('http://imgur.com/gallery/hot/viral/page/' + daysAgo + '/hit.json')
+			galleryResp = urllib2.urlopen('http://imgur.com/gallery/hot/viral/page/' + daysAgo + '/hit.json', timeout = TIMEOUT)
 			return json.load(galleryResp)['data']
 		except:
 			logging.exception('Failed to load Page #' + str(page))
@@ -115,7 +108,7 @@ class Scraper(object):
 		hits = db.testHits
 		for p in page:
 			try:
-				hitResp = urllib2.urlopen('http://imgur.com/gallery/'+ p['hash'] + '/comment/best/hit.json')
+				hitResp = urllib2.urlopen('http://imgur.com/gallery/'+ p['hash'] + '/comment/best/hit.json', timeout = TIMEOUT)
 				hitData = json.load(hitResp) 
 				hits.insert(hitData)
 			except:
@@ -138,8 +131,9 @@ logging.basicConfig(filename='scraper.log', level=logging.DEBUG, format=loggingF
 # db = client.imgur
 # pprint(printCollection(db.hour20))
 
+TIMEOUT = 3
 scraper = Scraper()
-scraper.processPages(1, 1)
+scraper.processPages(1, 2)
 
 
 

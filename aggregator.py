@@ -25,6 +25,8 @@ class Snapshot(object):
 
 	def store(self):
 		try:
+			for record in db[self.index].find({'shotType' : self.shotType}):
+				self._id = record['_id']
 			db[self.index].save(self.__toJSON())
 		except:
 			logging.exception('Failed to store Snapshot: ' + str(self.index))
@@ -165,7 +167,7 @@ def num(s, nType):
 	        return 0
 	else:
 		try:
-			return round(float(s), 3)
+			return float(s)
 		except:
 			return 0
 
