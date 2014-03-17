@@ -133,7 +133,7 @@ logging.basicConfig(filename='scraper.log', level=logging.DEBUG, format=loggingF
 
 TIMEOUT = 3
 scraper = Scraper()
-scraper.processPages(1, 2)
+scraper.processPages()
 
 
 
