@@ -40,7 +40,6 @@ class ImageShot(Snapshot):
 		self.virality		= 0
 		self.views			= 0
 		self.animated 		= 0
-		self.nsfw 			= 0
 		self.reddit 		= 0
 		self.shotType		= 'ImageShot'
 
@@ -52,8 +51,6 @@ class ImageShot(Snapshot):
 
 		if 'animated' in data and data['animated']:
 			self.animated += 1
-		if 'nsfw' in data and data['nsfw']:
-			self.nsfw += 1
 		if 'reddit' in data and data['reddit']:
 			self.reddit += 1
 		super(ImageShot, self).update(data)

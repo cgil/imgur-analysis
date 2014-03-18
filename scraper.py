@@ -46,13 +46,13 @@ class Scraper(object):
 	def aggregatePage(self, num):
 		page = self.getImgurPage(num)
 		if not page:
-			logging.warning('Could not open page #' + str(num))
+			logging.warning('Could not open page ' + str(num))
 			self.failedPages.add(num)
 			return
 		for p in page:
 			hit = self.getImgurHit(p['hash'])
 			if not hit:
-				logging.warning('Could not load hit with hash: ' + p['hash'] + ' in page #' + str(num))
+				logging.warning('Could not load hit with hash: ' + p['hash'] + ' in page ' + str(num))
 				continue
 			#	--time
 			imgDatetime = aggregator.findDatetime(hit, ['image', 'timestamp'])
@@ -88,7 +88,7 @@ class Scraper(object):
 			galleryResp = urllib2.urlopen('http://imgur.com/gallery/hot/viral/page/' + daysAgo + '/hit.json', timeout = TIMEOUT)
 			return json.load(galleryResp)['data']
 		except:
-			logging.exception('Failed to load Page #' + str(page))
+			logging.exception('Failed to load Page ' + str(page))
 			return False
 
 	#	Stores imgur data - loop runs through 1154 pages (one page per day of existance)
@@ -101,7 +101,7 @@ class Scraper(object):
 			if not page:
 				continue
 			self.storeImgurHit(db, page, i)
-			logging.info('Scraped page #' + str(i))
+			logging.info('Scraped page ' + str(i))
 		
 	#	Loads and stores a hit to mongo
 	def storeImgurHit(self, db, page, num):
@@ -112,7 +112,7 @@ class Scraper(object):
 				hitData = json.load(hitResp) 
 				hits.insert(hitData)
 			except:
-				logging.exception('Failed to insert a hit from page #' + str(num))
+				logging.exception('Failed to insert a hit from page ' + str(num))
 				continue
 
 	#	Insert data to given collection
