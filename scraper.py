@@ -12,6 +12,7 @@ from pprint import pprint
 
 # 	CURRENT PROBLEMS:
 #		Multi threading needed? currently takes ~9 hours to finish. -low priority
+#		Several collections named delta-# are appearing for unknown reason. -medium priority
 
 
 class Scraper(object):
@@ -123,12 +124,18 @@ def printCollection(col):
 	for i in col.find():
 		pprint(i)
 
+def dropCollection():
+	for i in xrange(167000, 168000):
+		db.drop_collection('delta-' + str(i))
+		print 'Dropped Delta-' + str(i)
+
 loggingFormat = '%(asctime)-15s %(levelname)s %(message)s'
 logging.basicConfig(filename='scraper.log', level=logging.DEBUG, format=loggingFormat, datefmt='%m-%d-%Y %H:%M:%S')
 
 
 # client = MongoClient()
 # db = client.imgur
+# dropCollection()
 # pprint(printCollection(db.hour20))
 
 TIMEOUT = 3
