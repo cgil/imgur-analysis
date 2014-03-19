@@ -51,10 +51,12 @@ def crossdomain(origin=None, methods=None, headers=None,
     return decorator
 
 @app.route("/hour/<which>/")
+@crossdomain(origin='*')
 def hour(which=''):
 	return dumps(db['hour'+str(which)].find())
 
 @app.route("/hour/<which>/<shotType>/")
+@crossdomain(origin='*')
 def hourType(which='', shotType=None):
 	if shotType == None:
 		query = {}
@@ -63,10 +65,12 @@ def hourType(which='', shotType=None):
 	return dumps(db['hour'+str(which)].find(query))
 
 @app.route("/weekday/<which>/")
+@crossdomain(origin='*')
 def weekday(which=''):
 	return dumps(db['weekday'+str(which)].find())
 
 @app.route("/weekday/<which>/<shotType>/")
+@crossdomain(origin='*')
 def weekdayType(which='', shotType=None):
 	if shotType == None:
 		query = {}
@@ -75,10 +79,12 @@ def weekdayType(which='', shotType=None):
 	return dumps(db['weekday'+str(which)].find(query))
 
 @app.route("/month/<which>/")
+@crossdomain(origin='*')
 def month(which=''):
 	return dumps(db['month'+str(which)].find())
 
 @app.route("/month/<which>/<shotType>/")
+@crossdomain(origin='*')
 def monthType(which='', shotType=None):
 	if shotType == None:
 		query = {}
@@ -87,10 +93,12 @@ def monthType(which='', shotType=None):
 	return dumps(db['month'+str(which)].find(query))
 
 @app.route("/year/<which>/")
+@crossdomain(origin='*')
 def year(which=''):
 	return dumps(db['year'+str(which)].find())
 
 @app.route("/year/<which>/<shotType>/")
+@crossdomain(origin='*')
 def yearType(which='', shotType=None):
 	if shotType == None:
 		query = {}
@@ -104,6 +112,7 @@ def delta(which=''):
 	return dumps(db['delta'+str(which)].find())
 
 @app.route("/delta/<which>/<shotType>/")
+@crossdomain(origin='*')
 def deltaType(which='', shotType=None):
 	if shotType == None:
 		query = {}
