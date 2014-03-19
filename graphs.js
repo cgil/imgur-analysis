@@ -2,8 +2,8 @@
 	'use strict';
 
 	$(document).ready(function() {
-		get(api.delta(0)).done(function(data){
-			console.dir(data);
+		get(api.delta(0)).done(function(data) {
+			window.console.dir(data);
 		});
 	});
 
@@ -30,8 +30,10 @@
 	//	Get helper
     var get = function(url) {
         var ret = new $.Deferred();
-        $.getJSON(url, function(data) {
-                ret.resolve(JSON.parse(data));
+        $.getJSON(url + '?callback=?', {dataType: 'jsonp', crossDomain: true,}, function(data) {
+        		var data = $.parseJSON(data);
+        		console.log(data);
+                ret.resolve(data);
         });
         return ret.promise();
     };
