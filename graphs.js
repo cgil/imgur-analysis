@@ -36,12 +36,9 @@
     var get = function(url) {
         var ret = new $.Deferred();
         $.getJSON(url, function(data) {
-			var data = $.parseJSON(data);
 			ret.resolve(data);
         });
         return ret.promise();
     };
-
-
 
 })(window, document, window.jQuery);
