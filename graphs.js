@@ -9,30 +9,34 @@
 
 	//	API middle man
 	var api = {
-		url: 'http://54.82.42.98:28017/imgur/',
-		delta: function(which) {
-			return this.url + 'delta' + which + '/';
+		url: 'http://54.82.42.98:5000/imgur/',
+		delta: function(which, type) {
+			type = typeof type !== 'undefined' ? type : '';
+			return this.url + 'delta/' + which + '/' + type;
 		},
-		hour: function(which) {
-			return this.url + 'hour' + which + '/';
+		hour: function(which, type) {
+			type = typeof type !== 'undefined' ? type : '';
+			return this.url + 'hour/' + which + '/' + type;
 		},
-		weekday: function(which) {
-			return this.url + 'weekday' + which + '/';
+		weekday: function(which, type) {
+			type = typeof type !== 'undefined' ? type : '';
+			return this.url + 'weekday/' + which + '/' + type;
 		},
-		month: function(which) {
-			return this.url + 'month' + which + '/';
+		month: function(which, type) {
+			type = typeof type !== 'undefined' ? type : '';
+			return this.url + 'month/' + which + '/' + type;
 		},
-		year: function(which) {
-			return this.url + 'year' + which + '/';
+		year: function(which, type) {
+			type = typeof type !== 'undefined' ? type : '';
+			return this.url + 'year/' + which + '/' + type;
 		}
 	};
 
 	//	Get helper
     var get = function(url) {
         var ret = new $.Deferred();
-        $.getJSON(url + '?callback=?', {dataType: 'jsonp', crossDomain: true,}, function(data) {
+        $.getJSON(url, function(data) {
         		var data = $.parseJSON(data);
-        		console.log(data);
                 ret.resolve(data);
         });
         return ret.promise();

@@ -21,7 +21,7 @@ def hourType(which='', shotType=None):
 
 @app.route("/weekday/<which>")
 def weekday(which=''):
-	return db['weekday'+str(which)].find()
+	return dumps(db['weekday'+str(which)].find())
 
 @app.route("/weekday/<which>/<shotType>")
 def weekdayType(which='', shotType=None):
@@ -33,7 +33,7 @@ def weekdayType(which='', shotType=None):
 
 @app.route("/month/<which>")
 def month(which=''):
-	return db['month'+str(which)].find()
+	return dumps(db['month'+str(which)].find())
 
 @app.route("/month/<which>/<shotType>")
 def monthType(which='', shotType=None):
@@ -45,7 +45,7 @@ def monthType(which='', shotType=None):
 
 @app.route("/year/<which>")
 def year(which=''):
-	return db['year'+str(which)].find()
+	return dumps(db['year'+str(which)].find())
 
 @app.route("/year/<which>/<shotType>")
 def yearType(which='', shotType=None):
@@ -57,7 +57,7 @@ def yearType(which='', shotType=None):
 
 @app.route("/delta/<which>")
 def delta(which=''):
-	return db['delta'+str(which)].find()
+	return dumps(db['delta'+str(which)].find())
 
 @app.route("/delta/<which>/<shotType>")
 def deltaType(which='', shotType=None):
