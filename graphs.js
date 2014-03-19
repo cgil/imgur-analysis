@@ -9,7 +9,7 @@
 
 	//	API middle man
 	var api = {
-		url: 'http://54.82.42.98:5000/imgur/',
+		url: 'http://54.82.42.98:5000/',
 		delta: function(which, type) {
 			type = typeof type !== 'undefined' ? type : '';
 			return this.url + 'delta/' + which + '/' + type;
@@ -36,8 +36,8 @@
     var get = function(url) {
         var ret = new $.Deferred();
         $.getJSON(url, function(data) {
-        		var data = $.parseJSON(data);
-                ret.resolve(data);
+			var data = $.parseJSON(data);
+			ret.resolve(data);
         });
         return ret.promise();
     };
