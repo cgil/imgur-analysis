@@ -2,7 +2,7 @@
 	'use strict';
 
 	$(document).ready(function() {
-		get(api.hour(0, 'CaptionShot')).done(function(data) {
+		get(api.hours('CaptionShot')).done(function(data) {
 			window.console.dir(data);
 		});
 	});
@@ -10,25 +10,23 @@
 	//	API middle man
 	var api = {
 		url: 'http://54.82.42.98:5000/',
-		delta: function(which, type) {
-			type = typeof type !== 'undefined' ? type : '';
-			return this.url + 'delta/' + which + '/' + type + '/';
+		formUrl: function(col, type) {
+			return this.url + col + '/' + type + '/';
 		},
-		hour: function(which, type) {
-			type = typeof type !== 'undefined' ? type : '';
-			return this.url + 'hour/' + which + '/' + type + '/';
+		deltas: function(type) {
+			return this.formUrl('deltas', type);
 		},
-		weekday: function(which, type) {
-			type = typeof type !== 'undefined' ? type : '';
-			return this.url + 'weekday/' + which + '/' + type + '/';
+		hours: function(type) {
+			return this.formUrl('hours', type);
 		},
-		month: function(which, type) {
-			type = typeof type !== 'undefined' ? type : '';
-			return this.url + 'month/' + which + '/' + type + '/';
+		weekdays: function(type) {
+			return this.formUrl('weekdays', type);
 		},
-		year: function(which, type) {
-			type = typeof type !== 'undefined' ? type : '';
-			return this.url + 'year/' + which + '/' + type + '/';
+		months: function(type) {
+			return this.formUrl('months', type);
+		},
+		years: function(type) {
+			return this.formUrl('years', type);
 		}
 	};
 
