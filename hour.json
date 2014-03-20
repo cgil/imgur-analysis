@@ -1,24 +1,24 @@
-{u'index': u'hour0', u'downs': 1026197, u'counter': 1227841, u'bestScore': 431977.9344465011, u'shotType': u'CaptionShot', 'token': 0, u'points': 15263403, u'_id': ObjectId('5327cd88cbca0516176eb414'), u'ups': 16289600}
-{u'index': u'hour1', u'downs': 1046735, u'counter': 1220541, u'bestScore': 426863.31129389553, u'shotType': u'CaptionShot', 'token': 1, u'points': 14888700, u'_id': ObjectId('5327cd88cbca0516176eb415'), u'ups': 15935435}
-{u'index': u'hour2', u'downs': 970177, u'counter': 1217835, u'bestScore': 422273.4052932533, u'shotType': u'CaptionShot', 'token': 2, u'points': 14400397, u'_id': ObjectId('5327cd88cbca0516176eb416'), u'ups': 15370574}
-{u'index': u'hour3', u'downs': 998840, u'counter': 1234870, u'bestScore': 428576.5509650268, u'shotType': u'CaptionShot', 'token': 3, u'points': 14973266, u'_id': ObjectId('5327cd88cbca0516176eb417'), u'ups': 15972106}
-{u'index': u'hour4', u'downs': 976314, u'counter': 1186604, u'bestScore': 411832.90505759197, u'shotType': u'CaptionShot', 'token': 4, u'points': 14351236, u'_id': ObjectId('5327cd88cbca0516176eb418'), u'ups': 15327550}
-{u'index': u'hour5', u'downs': 906095, u'counter': 1071878, u'bestScore': 372224.54738289723, u'shotType': u'CaptionShot', 'token': 5, u'points': 13254301, u'_id': ObjectId('5327cd88cbca0516176eb419'), u'ups': 14160396}
-{u'index': u'hour6', u'downs': 797978, u'counter': 916443, u'bestScore': 318363.271070462, u'shotType': u'CaptionShot', 'token': 6, u'points': 11702209, u'_id': ObjectId('5327cd88cbca0516176eb41a'), u'ups': 12500187}
-{u'index': u'hour7', u'downs': 674365, u'counter': 755992, u'bestScore': 261874.74029110372, u'shotType': u'CaptionShot', 'token': 7, u'points': 9839633, u'_id': ObjectId('5327cd88cbca0516176eb41b'), u'ups': 10513998}
-{u'index': u'hour8', u'downs': 554392, u'counter': 616220, u'bestScore': 213128.5729809196, u'shotType': u'CaptionShot', 'token': 8, u'points': 8362810, u'_id': ObjectId('5327cd88cbca0516176eb41c'), u'ups': 8917202}
-{u'index': u'hour9', u'downs': 490586, u'counter': 513361, u'bestScore': 178034.99314838275, u'shotType': u'CaptionShot', 'token': 9, u'points': 7136057, u'_id': ObjectId('5327cd88cbca0516176eb41d'), u'ups': 7626643}
-{u'index': u'hour10', u'downs': 443010, u'counter': 464428, u'bestScore': 160887.07502222108, u'shotType': u'CaptionShot', 'token': 10, u'points': 6854645, u'_id': ObjectId('5327cd88cbca0516176eb41e'), u'ups': 7297655}
-{u'index': u'hour11', u'downs': 486276, u'counter': 499359, u'bestScore': 175133.3204387304, u'shotType': u'CaptionShot', 'token': 11, u'points': 7912459, u'_id': ObjectId('5327cd88cbca0516176eb41f'), u'ups': 8398735}
-{u'index': u'hour12', u'downs': 582262, u'counter': 607075, u'bestScore': 213510.32087389738, u'shotType': u'CaptionShot', 'token': 12, u'points': 9564335, u'_id': ObjectId('5327cd88cbca0516176eb420'), u'ups': 10146597}
-{u'index': u'hour13', u'downs': 714795, u'counter': 776602, u'bestScore': 272564.3354352631, u'shotType': u'CaptionShot', 'token': 13, u'points': 11773660, u'_id': ObjectId('5327cd88cbca0516176eb421'), u'ups': 12488455}
-{u'index': u'hour14', u'downs': 852725, u'counter': 946014, u'bestScore': 331592.6052524493, u'shotType': u'CaptionShot', 'token': 14, u'points': 14024132, u'_id': ObjectId('5327cd88cbca0516176eb422'), u'ups': 14876857}
-{u'index': u'hour15', u'downs': 984751, u'counter': 1097324, u'bestScore': 387904.0453500792, u'shotType': u'CaptionShot', 'token': 15, u'points': 16650835, u'_id': ObjectId('5327cd88cbca0516176eb423'), u'ups': 17635586}
-{u'index': u'hour16', u'downs': 1073920, u'counter': 1193656, u'bestScore': 421531.2208503268, u'shotType': u'CaptionShot', 'token': 16, u'points': 17539172, u'_id': ObjectId('5327cd88cbca0516176eb424'), u'ups': 18613092}
-{u'index': u'hour17', u'downs': 1169843, u'counter': 1273578, u'bestScore': 453539.807288209, u'shotType': u'CaptionShot', 'token': 17, u'points': 18717132, u'_id': ObjectId('5327cd88cbca0516176eb425'), u'ups': 19886975}
-{u'index': u'hour18', u'downs': 1190822, u'counter': 1327013, u'bestScore': 473223.75731337594, u'shotType': u'CaptionShot', 'token': 18, u'points': 18722257, u'_id': ObjectId('5327cd88cbca0516176eb426'), u'ups': 19913079}
-{u'index': u'hour19', u'downs': 1214841, u'counter': 1364835, u'bestScore': 486968.01414880936, u'shotType': u'CaptionShot', 'token': 19, u'points': 18604856, u'_id': ObjectId('5327cd88cbca0516176eb427'), u'ups': 19819697}
-{u'index': u'hour20', u'downs': 1201024, u'counter': 1384647, u'bestScore': 491339.06100311934, u'shotType': u'CaptionShot', 'token': 20, u'points': 18124130, u'_id': ObjectId('5327cd88cbca0516176eb428'), u'ups': 19325154}
-{u'index': u'hour21', u'downs': 1188959, u'counter': 1370867, u'bestScore': 484448.2284960194, u'shotType': u'CaptionShot', 'token': 21, u'points': 17232620, u'_id': ObjectId('5327cd88cbca0516176eb429'), u'ups': 18421579}
-{u'index': u'hour22', u'downs': 1109315, u'counter': 1313106, u'bestScore': 462438.3716457389, u'shotType': u'CaptionShot', 'token': 22, u'points': 16195294, u'_id': ObjectId('5327cd88cbca0516176eb42a'), u'ups': 17304609}
-{u'index': u'hour23', u'downs': 1069867, u'counter': 1270140, u'bestScore': 447473.9731991592, u'shotType': u'CaptionShot', 'token': 23, u'points': 15916010, u'_id': ObjectId('5327cd88cbca0516176eb42b'), u'ups': 16985877}
+{u'index': u'hour0', u'downs': 1026197, u'counter': 1227841, u'bestScore': 431977.9344465011, u'shotType': u'CaptionShot', 'token': 0, u'points': 15263403, u'ups': 16289600}
+{u'index': u'hour1', u'downs': 1046735, u'counter': 1220541, u'bestScore': 426863.31129389553, u'shotType': u'CaptionShot', 'token': 1, u'points': 14888700, u'ups': 15935435}
+{u'index': u'hour2', u'downs': 970177, u'counter': 1217835, u'bestScore': 422273.4052932533, u'shotType': u'CaptionShot', 'token': 2, u'points': 14400397, u'ups': 15370574}
+{u'index': u'hour3', u'downs': 998840, u'counter': 1234870, u'bestScore': 428576.5509650268, u'shotType': u'CaptionShot', 'token': 3, u'points': 14973266, u'ups': 15972106}
+{u'index': u'hour4', u'downs': 976314, u'counter': 1186604, u'bestScore': 411832.90505759197, u'shotType': u'CaptionShot', 'token': 4, u'points': 14351236, u'ups': 15327550}
+{u'index': u'hour5', u'downs': 906095, u'counter': 1071878, u'bestScore': 372224.54738289723, u'shotType': u'CaptionShot', 'token': 5, u'points': 13254301, u'ups': 14160396}
+{u'index': u'hour6', u'downs': 797978, u'counter': 916443, u'bestScore': 318363.271070462, u'shotType': u'CaptionShot', 'token': 6, u'points': 11702209, u'ups': 12500187}
+{u'index': u'hour7', u'downs': 674365, u'counter': 755992, u'bestScore': 261874.74029110372, u'shotType': u'CaptionShot', 'token': 7, u'points': 9839633, u'ups': 10513998}
+{u'index': u'hour8', u'downs': 554392, u'counter': 616220, u'bestScore': 213128.5729809196, u'shotType': u'CaptionShot', 'token': 8, u'points': 8362810, u'ups': 8917202}
+{u'index': u'hour9', u'downs': 490586, u'counter': 513361, u'bestScore': 178034.99314838275, u'shotType': u'CaptionShot', 'token': 9, u'points': 7136057, u'ups': 7626643}
+{u'index': u'hour10', u'downs': 443010, u'counter': 464428, u'bestScore': 160887.07502222108, u'shotType': u'CaptionShot', 'token': 10, u'points': 6854645, u'ups': 7297655}
+{u'index': u'hour11', u'downs': 486276, u'counter': 499359, u'bestScore': 175133.3204387304, u'shotType': u'CaptionShot', 'token': 11, u'points': 7912459, u'ups': 8398735}
+{u'index': u'hour12', u'downs': 582262, u'counter': 607075, u'bestScore': 213510.32087389738, u'shotType': u'CaptionShot', 'token': 12, u'points': 9564335, u'ups': 10146597}
+{u'index': u'hour13', u'downs': 714795, u'counter': 776602, u'bestScore': 272564.3354352631, u'shotType': u'CaptionShot', 'token': 13, u'points': 11773660, u'ups': 12488455}
+{u'index': u'hour14', u'downs': 852725, u'counter': 946014, u'bestScore': 331592.6052524493, u'shotType': u'CaptionShot', 'token': 14, u'points': 14024132, u'ups': 14876857}
+{u'index': u'hour15', u'downs': 984751, u'counter': 1097324, u'bestScore': 387904.0453500792, u'shotType': u'CaptionShot', 'token': 15, u'points': 16650835, u'ups': 17635586}
+{u'index': u'hour16', u'downs': 1073920, u'counter': 1193656, u'bestScore': 421531.2208503268, u'shotType': u'CaptionShot', 'token': 16, u'points': 17539172, u'ups': 18613092}
+{u'index': u'hour17', u'downs': 1169843, u'counter': 1273578, u'bestScore': 453539.807288209, u'shotType': u'CaptionShot', 'token': 17, u'points': 18717132, u'ups': 19886975}
+{u'index': u'hour18', u'downs': 1190822, u'counter': 1327013, u'bestScore': 473223.75731337594, u'shotType': u'CaptionShot', 'token': 18, u'points': 18722257, u'ups': 19913079}
+{u'index': u'hour19', u'downs': 1214841, u'counter': 1364835, u'bestScore': 486968.01414880936, u'shotType': u'CaptionShot', 'token': 19, u'points': 18604856, u'ups': 19819697}
+{u'index': u'hour20', u'downs': 1201024, u'counter': 1384647, u'bestScore': 491339.06100311934, u'shotType': u'CaptionShot', 'token': 20, u'points': 18124130, u'ups': 19325154}
+{u'index': u'hour21', u'downs': 1188959, u'counter': 1370867, u'bestScore': 484448.2284960194, u'shotType': u'CaptionShot', 'token': 21, u'points': 17232620, u'ups': 18421579}
+{u'index': u'hour22', u'downs': 1109315, u'counter': 1313106, u'bestScore': 462438.3716457389, u'shotType': u'CaptionShot', 'token': 22, u'points': 16195294, u'ups': 17304609}
+{u'index': u'hour23', u'downs': 1069867, u'counter': 1270140, u'bestScore': 447473.9731991592, u'shotType': u'CaptionShot', 'token': 23, u'points': 15916010, u'ups': 16985877}
