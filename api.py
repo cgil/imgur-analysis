@@ -68,6 +68,7 @@ def combineCollections(pattern, shotType = None):
     with open(pattern+'.json', 'w') as outfile:
         for item in combo:
             item.pop("_id", None)
+            item.pop("bestScore", None)
             outfile.write("%s\n" % item)
     return combo
 
