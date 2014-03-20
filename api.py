@@ -50,12 +50,34 @@ def crossdomain(origin=None, methods=None, headers=None,
         return update_wrapper(wrapped_function, f)
     return decorator
 
-@app.route("/hour/<which>/")
+#   Combine all data from collections matching a given pattern
+def combineCollections(pattern, shotType = None):
+    if shotType != None:
+        query = { 'shotType' : shotType }
+    else:
+        query = {}
+    combo = []
+    for col in db.collection_names():
+        if col.find(pattern) != -1:
+            res = db[col].find(query)
+            try:
+                res['token'] = res.index.split(pattern)[1]
+                combo.append(res)
+            except:
+                pass
+    return combo
+
+@app.route('/hours/<shotType>/')
+@crossdomain(origin='*')
+def hours(shotType=None):
+    return dumps(combineCollections('hour', shotType))
+
+@app.route('/hour/<which>/')
 @crossdomain(origin='*')
 def hour(which=''):
 	return dumps(db['hour'+str(which)].find())
 
-@app.route("/hour/<which>/<shotType>/")
+@app.route('/hour/<which>/<shotType>/')
 @crossdomain(origin='*')
 def hourType(which='', shotType=None):
 	if shotType == None:
@@ -64,12 +86,17 @@ def hourType(which='', shotType=None):
 		query = { 'shotType' : shotType }
 	return dumps(db['hour'+str(which)].find(query))
 
-@app.route("/weekday/<which>/")
+@app.route('/weekdays/<shotType>/')
+@crossdomain(origin='*')
+def weekdays(shotType=None):
+    return dumps(combineCollections('weekday', shotType))
+
+@app.route('/weekday/<which>/')
 @crossdomain(origin='*')
 def weekday(which=''):
 	return dumps(db['weekday'+str(which)].find())
 
-@app.route("/weekday/<which>/<shotType>/")
+@app.route('/weekday/<which>/<shotType>/')
 @crossdomain(origin='*')
 def weekdayType(which='', shotType=None):
 	if shotType == None:
@@ -77,6 +104,11 @@ def weekdayType(which='', shotType=None):
 	else:
 		query = { 'shotType' : shotType }
 	return dumps(db['weekday'+str(which)].find(query))
+
+@app.route('/months/<shotType>/')
+@crossdomain(origin='*')
+def months(shotType=None):
+    return dumps(combineCollections('month', shotType))
 
 @app.route("/month/<which>/")
 @crossdomain(origin='*')
@@ -92,6 +124,11 @@ def monthType(which='', shotType=None):
 		query = { 'shotType' : shotType }
 	return dumps(db['month'+str(which)].find(query))
 
+@app.route('/years/<shotType>/')
+@crossdomain(origin='*')
+def years(shotType=None):
+    return dumps(combineCollections('year', shotType))
+
 @app.route("/year/<which>/")
 @crossdomain(origin='*')
 def year(which=''):
@@ -105,6 +142,11 @@ def yearType(which='', shotType=None):
 	else:
 		query = { 'shotType' : shotType }
 	return dumps(db['year'+str(which)].find(query))
+
+@app.route('/deltas/<shotType>/')
+@crossdomain(origin='*')
+def deltas(shotType=None):
+    return dumps(combineCollections('delta', shotType))
 
 @app.route("/delta/<which>/")
 @crossdomain(origin='*')
