@@ -65,11 +65,11 @@ def combineCollections(pattern, shotType = None):
                 combo.append(res)
             except:
                 pass
-    with open(pattern+'.json', 'w') as outfile:
-        for item in combo:
-            item.pop("_id", None)
-            item.pop("bestScore", None)
-            outfile.write("%s\n" % item)
+    # with open(pattern+'.json', 'w') as outfile:
+    #     for item in combo:
+    #         item.pop("_id", None)
+    #         item.pop("bestScore", None)
+    #         outfile.write("%s\n" % item)
     return combo
 
 @app.route('/hours/<shotType>/')

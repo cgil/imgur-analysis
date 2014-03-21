@@ -42,94 +42,62 @@
 
 
 
-var lineChart = function(data) {
+	var lineChart = function(data) {
+		
+		// define dimensions of graph
+		var m = [80, 80, 80, 100]; // margins
+		var w = 1000 - m[1] - m[3]; // width
+		var h = 400 - m[0] - m[2]; // height
 
-	var margin = {top: 20, right: 80, bottom: 30, left: 100},
-		width = 960 - margin.left - margin.right,
-		height = 500 - margin.top - margin.bottom;
+		// X scale will fit all values from data[] within pixels 0-w
+		var x = d3.scale.linear().domain([0, d3.max(data, function(d) { return d.token; })]).range([0, w]);
+		// Y scale will fit values from 0-10 within pixels h-0 (Note the inverted domain for the y-scale: bigger is up!)
+		var y = d3.scale.linear().domain([0, d3.max(data, function(d) { return d.counter; })]).range([h, 0]);
 
-	// var parseDate = d3.time.format("%Y%m%d").parse;
+		// create a line function that can convert data[] into x and y points
+		var line = d3.svg.line()
+			// assign the X function to plot our line as we wish
+			.x(function(d,i) { 
+				// return the X coordinate where we want to plot this datapoint
+				return x(i); 
+			})
+			.y(function(d) { 
+				// return the Y coordinate where we want to plot this datapoint
+				return y(d.counter); 
+			});
 
-	var x = d3.scale.linear()
-		.range([0, width]);
+		// Add an SVG element with the desired dimensions and margin.
+		var graph = d3.select("#graph").append("svg")
+			.attr("width", w + m[1] + m[3])
+			.attr("height", h + m[0] + m[2])
+			.append("g")
+				.attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
-	var y = d3.scale.linear()
-		.range([height, 0]);
+		// create yAxis
+		var xAxis = d3.svg.axis().scale(x).ticks(d3.max(data, function(d) { return d.token; })).tickSize(-h).tickSubdivide(true);
+		// Add the x-axis.
+		graph.append("g")
+			.attr("class", "x axis")
+			.attr("transform", "translate(0," + h + ")")
+			.call(xAxis);
 
-	var color = d3.scale.category10();
+		// create left yAxis
+		var yAxisLeft = d3.svg.axis().scale(y).orient("left");
+		// Add the y-axis to the left
+		graph.append("g")
+			.attr("class", "y axis")
+			.attr("transform", "translate(-25,0)")
+			.call(yAxisLeft);
+		
+		// Add the line by appending an svg:path element with the data line we created above
+		// do this AFTER the axes above so that the line is above the tick-lines
 
-	var xAxis = d3.svg.axis()
-		.scale(x)
-		.orient("bottom");
+		$.each(['counter', 'points', 'ups', 'downs', 'bestScore'], function(k, v) {
+			graph.append("path")
+				.attr("d", line(data));
+		});
 
-	var yAxis = d3.svg.axis()
-		.scale(y)
-		.orient("left");
-
-	var line = d3.svg.line()
-		.interpolate("basis")
-		.x(function(d) { return x(d.token); })
-		.y(function(d) { return y(d.counter); });
-
-	var svg = d3.select("body").append("svg")
-		.attr("width", width + margin.left + margin.right)
-		.attr("height", height + margin.top + margin.bottom)
-		.append("g")
-		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-	color.domain(d3.keys(data[0]).filter(function(key) { return key !== "token"; }));
-
-	// var cities = color.domain().map(function(name) {
-	// 	return {
-	// 		name: name,
-	// 		values: data.map(function(d) {
-	// 			return {date: d.date, temperature: +d[name]};
-	// 		})
-	// 	};
-	// });
-
-	x.domain(d3.extent(data, function(d) { return d.token; }));
-	y.domain(d3.extent(data, function(d) { return d.counter; }));
-
-	svg.append("g")
-		.attr("class", "x axis")
-		.attr("transform", "translate(0," + height + ")")
-		.call(xAxis)
-		.append("text")
-			.attr("x", width / 2 )
-			.attr("y", 30)
-			.style("text-anchor", "middle")
-			.text("Time");
-
-	svg.append("g")
-		.attr("class", "y axis")
-		.call(yAxis)
-		.append("text")
-			.attr("transform", "rotate(-90)")
-			.attr("y", 6)
-			.attr("dy", ".71em")
-			.style("text-anchor", "end")
-			.text("Count");
-
-	var info = svg.selectAll(".info")
-		.data(data)
-		.enter().append("g")
-			.attr("class", "info");
-
-	info.append("path")
-		.datum(data)
-		.attr("class", "line")
-		.attr("d", line)
-		.style("stroke", function(d) { return color(d.token); });
-
-	info.append("text")
-		.datum(function(d) { return {token: d.token, counter: d.counter}; })
-		.attr("transform", function(d) { return "translate(" + x(d.token) + "," + y(d.counter) + ")"; })
-		.attr("x", 3)
-		.attr("dy", ".35em")
-		.text(function(d) { return d.token; });
-
-};
+	};
 
 
 
