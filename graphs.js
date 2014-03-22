@@ -3,8 +3,8 @@
 
 	$(document).ready(function() {
 		get(api.deltas('DeltaShot')).done(function(data) {
-			window.console.dir(data);
-			generateChart(data);
+			data = modifyData(data, 'DeltaShot');
+			generateChart(data, 'normalizedCaptions', ['token', 'counter', 'points', 'ups', 'downs'], 'spline', true);
 		});
 
 	});
@@ -41,37 +41,51 @@
         return ret.promise();
     };
 
+    //	Remove unused keys in data object
+    var modifyData = function(data, type) {
+		var keys = [];
+		if(type === 'ImageShot') {
+			keys = ['index', 'shotType', 'startingScore', '_id'];
+		}
+		else {
+			keys = ['index', 'shotType', 'bestScore', '_id'];
+		}
+		for(var i in data) {
+			for(var j in keys) {
+				delete data[i][keys[j]];
+			}
+		}
+		return data;
+    };
+
+	//	Normalize data
     var normalize = function(n, min, max) {
 		return (n-min)/(max-min);
     };
 
-	var generateChart = function(data) {
-		var x = ['x'];
-		var counter = ['counter'];
-		var points = ['points'];
-		var ups = ['ups'];
-		var downs = ['downs'];
+	var generateChart = function(data, chartId, fields, chartType, normalized) {
 
-		$.each(data, function(k, v){
-			x.push(v.tokens);
-			counter.push(normalize(v.counter, 0, d3.max(data, function(d) { return d.counter; })));
-			points.push(normalize(v.points, 0, d3.max(data, function(d) { return d.points; })));
-			ups.push(normalize(v.ups, 0, d3.max(data, function(d) { return d.ups; })));
-			downs.push(normalize(v.downs, 0, d3.max(data, function(d) { return d.downs; })));
-		});
+		var cols = new Array(fields.length);
+		for(var i in data) {
+			for(var j in fields) {
+				if(typeof cols[j] === 'undefined') {
+					cols[j] = [fields[j]];
+				}
+				var val = data[i][fields[j]];
+				if(normalized === true || fields[j] !== 'token') {
+					val = normalize(val, 0, d3.max(data, function(d) { return d[fields[j]]; }));
+				}
+				cols[j].push(val);
+			}
+		}
 
+		$("#chartContainer").append("<div id='" + chartId + "'></div>");
 		var chart = c3.generate({
-			bindto: '#chart',
+			bindto: '#' + chartId,
 			data: {
-				x: 'x',
-				columns: [
-					x,
-					counter,
-					points,
-					ups,
-					downs
-				],
-				type: 'spline'
+				x: 'token',
+				columns: cols,
+				type: chartType
 			}
 		});
 	};
