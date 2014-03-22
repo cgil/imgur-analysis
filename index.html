@@ -1,47 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<link rel="stylesheet" type="text/css" href="graphs.css">
+	<!-- <link rel="stylesheet" type="text/css" href="graphs.css"> -->
+	<link rel="stylesheet" type="text/css" href="c3.css">
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
 	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<script src="c3.min.js"></script>
 	<script src="graphs.js"></script>
 </head>
 <body>
 
-			<style>
-			/* tell the SVG path to be a thin blue line without any area fill */
-			path {
-				stroke: steelblue;
-				stroke-width: 1;
-				fill: none;
-			}
-			
-			.axis {
-			  shape-rendering: crispEdges;
-			}
- 
-			.x.axis line {
-			  stroke: lightgrey;
-			}
- 
-			.x.axis .minor {
-			  stroke-opacity: .5;
-			}
- 
-			.x.axis path {
-			  display: none;
-			}
- 
-			.y.axis line, .y.axis path {
-			  fill: none;
-			  stroke: #000;
-			}
-		</style>
-
- 
- 
-	<div id="graph" class="aGraph" style="position:absolute;top:0px;left:0; float:left;"></div>
-
-
+<div class='chart'>
+<div id='chart'></div>
+</div>
 </body>
 </html>
