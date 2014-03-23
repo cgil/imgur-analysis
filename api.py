@@ -59,8 +59,8 @@ def combineCollections(pattern, shotType = None):
     combo = []
     for col in db.collection_names():
         if col.find(pattern) != -1:
-            res = db[col].find(query)[0]
             try:
+                res = db[col].find(query)[0]
                 res['token'] = int(res['index'].split(pattern)[1])
                 combo.append(res)
             except:

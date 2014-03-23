@@ -142,3 +142,30 @@ text {
   stroke-width: 0;
   opacity: 0.2;
 }
+
+.chart {
+  margin-bottom: 20px;
+}
+
+.chartBlock {
+  float: left;
+  width: 600px;
+}
+
+.chartTitle {
+  font: 14px sans-serif;
+  text-align: center;
+  display: block;
+}
+
+#chartContainer {
+  width: auto;
+  height: auto;
+  float: left;
+  clear: both;
+}
+
+.bulkContainer {
+  float: left;
+  clear: both;
+}
