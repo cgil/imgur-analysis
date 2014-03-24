@@ -2,10 +2,17 @@
 	'use strict';
 
 	$(document).ready(function() {
-		var graphTypes = ['hours', 'weekdays', 'months', 'years', 'deltas'];
-		for(var g in graphTypes) {
-			showCharts(graphTypes[g]);
+		var pathArray = window.location.pathname.split( '/' );
+		if(pathArray[2] === 'custom.html') {
+			
 		}
+		else {
+			var graphTypes = ['hours', 'weekdays', 'months', 'years', 'deltas'];
+			for(var g in graphTypes) {
+				showCharts(graphTypes[g]);
+			}
+		}
+		
 	});
 
 	var showCharts = function(chartType) {
@@ -35,7 +42,7 @@
 				var id = chartType + '-DeltaShot';
 				var bulkContainer = id + '-container';
 				$('#chartContainer').append("<div class='bulkContainer' id='" + bulkContainer + "'></div>");
-				data = removeKeys(data, 'DeltaShot');
+				data = modifyData(data, 'DeltaShot');
 				//	All data
 				generateChart(data, id+'-all', bulkContainer, ['token', 'counter', 'points', 'ups', 'downs'], 
 					'spline', ['Aggregate of comment points by ' + chartType, xlabel, 'Values'], false);
@@ -49,6 +56,12 @@
 				//	Normalized data
 				generateChart(data, id+'-norm', bulkContainer, ['token', 'counter', 'points', 'ups', 'downs'], 
 					'spline', ['Normalized comment data by ' + chartType, xlabel, 'Values (normalized)'], true);
+				//	Data per counter
+				generateChart(data, id+'-ppc', bulkContainer, ['token', 'pointsPerCounter', 'upsPerCounter', 'downsPerCounter'], 
+					'spline', ['Aggregate comment data/counter by ' + chartType, xlabel, 'Values/Counter'], false);
+				//	Data per counter normalized
+				generateChart(data, id+'-norm-ppc', bulkContainer, ['token', 'pointsPerCounter', 'upsPerCounter', 'downsPerCounter'], 
+					'spline', ['Normalized comment data/counter by ' + chartType, xlabel, 'Values/Counter (normalized)'], true);
 			});
 			return;
 		}
@@ -57,7 +70,7 @@
 			var id = chartType + '-CaptionShot';
 			var bulkContainer = id + '-container';
 			$('#chartContainer').append("<div class='bulkContainer' id='" + bulkContainer + "'></div>");
-			data = removeKeys(data, 'CaptionShot');
+			data = modifyData(data, 'CaptionShot');
 			//	All data
 			generateChart(data, id+'-all', bulkContainer, ['token', 'counter', 'points', 'ups', 'downs'], 
 				'spline', ['Aggregate of comment points by ' + chartType, xlabel, 'Values'], false);
@@ -71,6 +84,15 @@
 			//	Normalized data
 			generateChart(data, id+'-norm', bulkContainer, ['token', 'counter', 'points', 'ups', 'downs'], 
 				'spline', ['Normalized comment data by ' + chartType, xlabel, 'Values (normalized)'], true);
+			//	Data per counter
+			axes = {
+				downsPerCounter: 'y2'
+			};
+			generateChart(data, id+'-ppc', bulkContainer, ['token', 'pointsPerCounter', 'upsPerCounter', 'downsPerCounter'], 
+				'spline', ['Aggregate comment data/counter by ' + chartType, xlabel, 'Values/Counter'], false, axes);
+			//	Data per counter normalized
+			generateChart(data, id+'-norm-ppc', bulkContainer, ['token', 'pointsPerCounter', 'upsPerCounter', 'downsPerCounter'], 
+				'spline', ['Normalized comment data/counter by ' + chartType, xlabel, 'Values/Counter (normalized)'], true);
 		});
 
 		//	Images
@@ -78,7 +100,7 @@
 			var id = chartType + '-ImageShot';
 			var bulkContainer = id + '-container';
 			$('#chartContainer').append("<div class='bulkContainer' id='" + bulkContainer + "'></div>");
-			data = removeKeys(data, 'ImageShot');
+			data = modifyData(data, 'ImageShot');
 			//	All data
 			generateChart(data, id+'-all', bulkContainer, ['token', 'counter', 'points', 'ups', 'downs', 'views', 'virality', 'score'], 
 				'spline', ['Aggregate of image points by ' + chartType, xlabel, 'Values'], false);
@@ -99,6 +121,19 @@
 			//	Normalized data
 			generateChart(data, id+'-norm', bulkContainer, ['token', 'counter', 'points', 'ups', 'downs', 'views', 'virality', 'score'], 
 				'spline', ['Normalized image data by ' + chartType, xlabel, 'Values (normalized)'], true);
+			//	Data per counter
+			axes = {
+				pointsPerCounter: 'y2', 
+				upsPerCounter: 'y2', 
+				downsPerCounter: 'y2', 
+				viralityPerCounter: 'y2', 
+				scorePerCounter: 'y2'
+			};
+			generateChart(data, id+'-ppc', bulkContainer, ['token', 'pointsPerCounter', 'upsPerCounter', 'downsPerCounter', 'viewsPerCounter', 'viralityPerCounter', 'scorePerCounter'], 
+				'spline', ['Aggregate comment data/counter by ' + chartType, xlabel, 'Values/Counter'], false, axes);
+			//	Data per counter normalized
+			generateChart(data, id+'-norm-ppc', bulkContainer, ['token', 'pointsPerCounter', 'upsPerCounter', 'downsPerCounter', 'viewsPerCounter', 'viralityPerCounter', 'scorePerCounter'], 
+				'spline', ['Normalized image data/counter by ' + chartType, xlabel, 'Values/Counter (normalized)'], true);
 		});
 
 	}
@@ -136,17 +171,31 @@
     };
 
     //	Remove unused keys in data object
-    var removeKeys = function(data, type) {
+    var modifyData = function(data, type) {
 		var keys = [];
 		if(type === 'ImageShot') {
 			keys = ['index', 'shotType', 'startingScore', '_id'];
+			for(var i in data) {
+				for(var j in keys) {
+					delete data[i][keys[j]];
+					data[i]['pointsPerCounter'] = data[i]['points']/data[i]['counter'];
+					data[i]['upsPerCounter'] = data[i]['ups']/data[i]['counter'];
+					data[i]['downsPerCounter'] = data[i]['downs']/data[i]['counter'];
+					data[i]['viewsPerCounter'] = data[i]['views']/data[i]['counter'];
+					data[i]['viralityPerCounter'] = data[i]['virality']/data[i]['counter'];
+					data[i]['scorePerCounter'] = data[i]['score']/data[i]['counter'];
+				}
+			}
 		}
 		else {
 			keys = ['index', 'shotType', 'bestScore', '_id'];
-		}
-		for(var i in data) {
-			for(var j in keys) {
-				delete data[i][keys[j]];
+			for(var i in data) {
+				for(var j in keys) {
+					delete data[i][keys[j]];
+					data[i]['pointsPerCounter'] = data[i]['points']/data[i]['counter'];
+					data[i]['upsPerCounter'] = data[i]['ups']/data[i]['counter'];
+					data[i]['downsPerCounter'] = data[i]['downs']/data[i]['counter'];
+				}
 			}
 		}
 		return data;
