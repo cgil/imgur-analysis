@@ -1,20 +1,12 @@
 body {
-  font: 10px sans-serif;
-}
-
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-
-.x.axis path {
-  display: none;
-}
-
-.line {
-  fill: none;
-  stroke: steelblue;
-  stroke-width: 1.5px;
+  	font-family: MontserratRegular, Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 18px;
+	text-align: left;
+	display: inline;
+	font-weight: normal;
+	cursor: pointer;
+	color: rgb(68, 68, 68);
+	list-style-position: outside;
+	font-style: normal;
 }

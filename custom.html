@@ -1,26 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang='en'>
 <head>
 	<title>Custom visualizations of Imgur data</title>
+	<meta charset ="utf-8">
+	<meta content ="width=device-width" name="viewport">
+
 	<link rel="stylesheet" type="text/css" href="c3.css">
 	<link href="iCheck/skins/flat/red.css" rel="stylesheet">
-	<script src="iCheck/icheck.js"></script>
+	<link href="iCheck/css/custom.css" rel="stylesheet">
+
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+	<script src="iCheck/icheck.min.js"></script>
+	<script src="iCheck/js/custom.min.js"></script>
 	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 	<script src="c3.min.js"></script>
 	<script src="graphs.js"></script>
+<script>
+$(document).ready(function(){
+  $('input').iCheck({
+    checkboxClass: 'icheckbox_flat-red',
+    radioClass: 'iradio_flat-red'
+  });
+});
+</script>
 </head>
 <body>
 
-<div id='options'>
-
-	<input type="checkbox">
-	<input type="checkbox" checked>
-	<input type="radio" name="iCheck">
-	<input type="radio" name="iCheck" checked>
-
+<div id='fields'>
+	<h4>Y-fields</h4>
+	<ul class='list'>
+		<li>
+			<input type="checkbox"> 
+			<label for="checkbox-1" class="">Checkbox 2</label>
+		</li>
+		<li>
+			<input type="checkbox"> 
+			<label for="checkbox-2" class="">Checkbox 2</label>
+		</li>
+	</ul>
 
 </div>
+
 <!-- <div id='chartContainer'></div> -->
 
 </body>
