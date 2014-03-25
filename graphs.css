@@ -1,12 +1,7 @@
-body {
-  	font-family: MontserratRegular, Helvetica, Arial, sans-serif;
-	font-size: 14px;
-	line-height: 18px;
-	text-align: left;
-	display: inline;
-	font-weight: normal;
-	cursor: pointer;
-	color: rgb(68, 68, 68);
-	list-style-position: outside;
-	font-style: normal;
+.textInput {
+	padding-left: 0px !important;
+	padding-bottom: 10px !important;
+}
+.textBox {
+	width: 100px;
 }

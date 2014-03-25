@@ -11,6 +11,14 @@
 <body>
 
 <div id='chartContainer'></div>
+<script>
+	$(document).ready(function() {
+		var graphTypes = ['hours', 'weekdays', 'months', 'years', 'deltas'];
+		for(var g in graphTypes) {
+			window.graphy.showCharts(graphTypes[g]);
+		}
+	});
+</script>
 
 </body>
 </html>

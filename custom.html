@@ -8,13 +8,12 @@
 	<link rel="stylesheet" type="text/css" href="c3.css">
 	<link href="iCheck/skins/flat/red.css" rel="stylesheet">
 	<link href="iCheck/css/custom.css" rel="stylesheet">
+	<link href="graphs.css" rel="stylesheet">
 
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
 	<script src="iCheck/icheck.min.js"></script>
-	<script src="iCheck/js/custom.min.js"></script>
 	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 	<script src="c3.min.js"></script>
-	<script src="graphs.js"></script>
 <script>
 $(document).ready(function(){
   $('input').iCheck({
@@ -25,23 +24,81 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
+	<div class ="skin skin-flat">
+		<dl class ="clear">
+			<dd class ="selected">
+				<div class="skin-section">
+					<h4>X-Axis</h4>
+					<ul class ="list">
+						<li>
+							<input type="radio" id="radio-1" name="flat-radio">
+							<label for ="radio-1">Radio</label>
+						</li>
+					</ul>
+				</div>
+				<div class="skin-section">
+					<h4>Y1-Axis</h4>
+					<ul class ="list">
+						<li>
+							<input type="checkbox" id="checkbox-1">
+							<label for ="checkbox-1">Chaa</label>
+						</li>
+					</ul>
+				</div>
+				<div class="skin-section">
+					<h4>Y2-Axis</h4>
+					<ul class ="list">
+						<li>
+							<input type="checkbox" id="checkbox-1">
+							<label for ="checkbox-1">Chec1</label>
+						</li>
+					</ul>
+				</div>
+				<div class="skin-section">
+					<h4>Chart type</h4>
+					<ul class ="list">
+						<li>
+							<input type="radio" id="radio-2" name="flat-radio">
+							<label for ="radio-2">Raddd</label>
+						</li>
+							<li>
+							<input type="radio" id="radio-2" name="flat-radio">
+							<label for ="radio-2">Raddd</label>
+						</li>
+							<li>
+							<input type="radio" id="radio-2" name="flat-radio">
+							<label for ="radio-2">Raddd</label>
+						</li>
+					</ul>
+				</div>
+				<div class="skin-section">
+					<h4>Axis labels</h4>
+					<ul class ="list">
+						<li class="textInput">
+							<input class="textBox" type="textbox" placeholder="Title"></input>
+						</li>
+						<li class="textInput">
+							<input class="textBox" type="textbox" placeholder="Title"></input>
+						</li>
+						<li class="textInput">
+							<input class="textBox" type="textbox" placeholder="Title"></input>
+						</li>
+					</ul>
+				</div>
+				<div class="skin-section">
+					<h4>Options</h4>
+					<ul class ="list">
+						<li>
+							<input type="checkbox" id="checkbox-1">
+							<label for ="radio-2">Nssor</label>
+						</li>
+					</ul>
+				</div>
+			</dd>
+		</dl>
+	</div>
 
-<div id='fields'>
-	<h4>Y-fields</h4>
-	<ul class='list'>
-		<li>
-			<input type="checkbox"> 
-			<label for="checkbox-1" class="">Checkbox 2</label>
-		</li>
-		<li>
-			<input type="checkbox"> 
-			<label for="checkbox-2" class="">Checkbox 2</label>
-		</li>
-	</ul>
-
-</div>
-
-<!-- <div id='chartContainer'></div> -->
+<div id='chartContainer'></div>
 
 </body>
 </html>

@@ -1,21 +1,9 @@
 (function(window, document, $, d3, c3){
 	'use strict';
 
-	$(document).ready(function() {
-		var pathArray = window.location.pathname.split( '/' );
-		if(pathArray[2] === 'custom.html') {
-			
-		}
-		else {
-			var graphTypes = ['hours', 'weekdays', 'months', 'years', 'deltas'];
-			for(var g in graphTypes) {
-				showCharts(graphTypes[g]);
-			}
-		}
-		
-	});
+	var graphy = window.graphy = {};
 
-	var showCharts = function(chartType) {
+	graphy.showCharts = function(chartType) {
 		var xlabel = '';
 		var axes = {};
 		if(chartType === 'hours') {
@@ -265,6 +253,9 @@
 			size: {
 				height: 240,
 				width: 480
+			},
+			tooltip: {
+				show: false
 			}
 		});
 	};
