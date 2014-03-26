@@ -3,6 +3,56 @@
 
 	var graphy = window.graphy = {};
 
+	graphy.getData = function(set, type) {
+		var shot = '';
+		if(type === 'comments') {
+			shot = 'CaptionShot';
+		}
+		else if(type === 'images') {
+			shot = 'ImageShot';
+		}
+		else {
+			shot = 'DeltaShot';
+		}
+		return get(api[set](shot)).then(function(data) {
+			return modifyData(data, shot);
+		});
+	};
+
+	graphy.selectionFactory = function(title, id, data) {
+		var len = data.length;
+		var text = '<div class="skin-section" id="' + id + '">'		+
+						'<h4>' + title + '</h4>'	+
+						'<ul class ="list">';
+		for(var i=0; i < len; i++) {
+			if(data[i]['type'] === 'radio') {
+				text += '<li>';
+				text += '<input type="radio" id="' + id+'-'+i + '" name="' + id + '" value="' + data[i]['name'] + '">';
+				text += '<label for ="' + id+'-'+i + '">' + data[i]['name'] + '</label>';
+				text += '</li>';
+			}
+			else if(data[i]['type'] === 'checkbox') {
+				text += '<li>';
+				text += '<input type="checkbox" id="' + id+'-'+i + '"value="' + data[i]['name'] + '">';
+				text += '<label for ="' + id+'-'+i + '">' + data[i]['name'] + '</label>';
+				text += '</li>';
+			}
+			else if(data[i]['type'] === 'text') {
+				text +=	'<li class="textInput">';
+				text +=	'<input class="textBox" type="textbox" id="' + id+'-'+i + '" placeholder="' +
+							data[i]['placeholder'] + '"></input>';
+				text += '</li>';
+			}
+			else {
+				text += '<a id="' + id+'-'+i + '" href="#" class="button">' + data[i]['name'] + '</a>';
+			}
+		}
+		text +=			'</ul>'	+
+					'</div>';
+		$('#selectionContainer').append(text);
+
+	};
+
 	graphy.showCharts = function(chartType) {
 		var xlabel = '';
 		var axes = {};
@@ -124,7 +174,7 @@
 				'spline', ['Normalized image data/counter by ' + chartType, xlabel, 'Values/Counter (normalized)'], true);
 		});
 
-	}
+	};
 
 	//	API middle man
 	var api = {
@@ -209,6 +259,59 @@
 	};
 
 	var generateChart = function(data, chartId, bulkContainer, fields, chartType, axisLabels, normalized, axes) {
+		if(typeof axes === 'undefined') {
+			axes = {};
+		}
+		//	Restructure data to [['field1', val1, val2, ...], ...]
+		var cols = new Array(fields.length);
+		for(var i in data) {
+			for(var j in fields) {
+				if(typeof cols[j] === 'undefined') {
+					cols[j] = [fields[j]];
+				}
+				var val = data[i][fields[j]];
+				if(normalized === true && fields[j] !== 'token') {
+					val = normalize(val, 0, d3.max(data, function(d) { return d[fields[j]]; }));
+				}
+				cols[j].push(val);
+			}
+		}
+
+		$('#' + bulkContainer).append("<div class='chartBlock'><span class='chartTitle'>" + axisLabels[0] + 
+			"</span><div class='chart' id='" + chartId + "'></div></div>");
+		var chart = c3.generate({
+			bindto: '#' + chartId,
+			data: {
+				x: 'token',
+				columns: cols,
+				type: chartType,
+				axes: axes			},
+			axis: {
+				x: {
+					label: axisLabels[1]		
+				},
+				y: {
+					label: axisLabels[2]
+				},
+				y2: {
+					show: true
+				}
+			},
+			color: {
+				pattern: fields.map(stringToColor)
+			},
+			size: {
+				height: 240,
+				width: 480
+			},
+			tooltip: {
+				show: false
+			}
+		});
+	};
+
+
+	graphy.generate = function(data, chartId, bulkContainer, fields, chartType, axisLabels, normalized, axes) {
 		if(typeof axes === 'undefined') {
 			axes = {};
 		}

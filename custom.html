@@ -14,91 +14,124 @@
 	<script src="iCheck/icheck.min.js"></script>
 	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 	<script src="c3.min.js"></script>
+	<script src="graphs.js"></script>
 <script>
-$(document).ready(function(){
-  $('input').iCheck({
-    checkboxClass: 'icheckbox_flat-red',
-    radioClass: 'iradio_flat-red'
-  });
+$(document).ready(function() {
+	var SELECTIONS = [];
+	//	Initialize iCheck
+	var initiCheck = function(sel) {
+		$(sel).iCheck({
+			checkboxClass: 'icheckbox_flat-red',
+			radioClass: 'iradio_flat-red'
+		});
+	};
+
+	//	Form the selections object
+	var setSelections = function(data) {
+		var fields = Object.keys(data[0]);
+		var chartTypes = ['line', 'timeseries', 'spline', 'bar', 'scatter', 'pie', 'donut', 'area', 'area-spline'];
+		var axisLabelPlaceholders = ['title', 'x-Axis-label', 'y1-Axis-label', 'y2-Axis-label'];
+		var options = ['normalized'];
+		SELECTIONS = [
+			{ name: 'x-Axis', id: 'xaxis', items: makeSelItem(fields, 'radio') },
+			{ name: 'y1-Axis', id: 'y1axis', items: makeSelItem(fields, 'checkbox') },
+			{ name: 'y2-Axis', id: 'y2axis', items: makeSelItem(fields, 'checkbox') },
+			{ name: 'Chart type', id: 'charttype', items: makeSelItem(chartTypes, 'radio') },
+			{ name: 'Options', id: 'options', items: makeSelItem(options, 'checkbox') },
+			{ name: 'Axis labels', id: 'axislabels', 
+				items: axisLabelPlaceholders.map(function(d) { return { name: d, placeholder: d, type: 'text' }; }) },
+			{ name: 'Generate graph', id: 'generate', items: [{type: 'button', name: 'Go!'}] }
+		];
+		return SELECTIONS;
+	};
+
+	//	Form one selection item object
+	var makeSelItem = function(data, checkType) {
+		return data.map(function(d) { return { name: d, type: checkType }; })
+	};
+
+	//	Remove all of the selections
+	var removeMainSelections = function() {
+		for(var i in SELECTIONS) {
+			$('#'+SELECTIONS[i]['id']).remove();	
+		}
+	};
+
+	var getSelections = function() {
+		for(var i in SELECTIONS) {
+			var sel = SELECTIONS[i];
+			if(typeof sel['items'] === 'undefined' || sel['items'].length === 0)
+				continue;
+			// if(sel.items[0]['type'] === 'radio') {
+			// 	var val = $('input[name='+ sel['id'] +']:checked', '#' + sel['id']).val();
+			// }
+			// else if(sel.items[0]['type'] === 'checkbox') {
+			// 	var val = $('#' + sel['id'] + ' input:checked').map(function(i, el){ return el.value; }).get(); 
+			// }
+			if(sel.items[0]['type'] === 'text') {
+				var val = $('#' + sel['id'] + ' input').val();
+			}
+			if(typeof val !== 'undefined' && val.length !== 0 && val !== '') {
+				window.console.log(sel['id'] + ' ' + val);
+				window.console.log(val);
+			}
+		}
+	};
+
+	var createMainSelections = function(data) {
+
+		if(typeof data === 'undefined' || data.length === 0)
+			return;
+		var sels = setSelections(data);
+		for(var i in sels) {
+			window.graphy.selectionFactory(sels[i]['name'], sels[i]['id'], sels[i]['items']);
+		}
+		initiCheck('input');
+		$('#selectionContainer').on('click', '.button', function(event) {
+			var dataset = $('input[name=dataset]:checked', '#dataset').val();
+			var datatype = $('input[name=datatype]:checked', '#datatype').val();
+			// window.graphy.generate(data, 'custom', 'custom-chart', fields, chartType, axisLabels, normalized, axes);
+			getSelections();
+			event.preventDefault();
+		});
+	};
+
+	var dataOptions = {
+		hours : ['comments', 'images'],
+		weekdays : ['comments', 'images'],
+		months : ['comments', 'images'],
+		years : ['comments', 'images'],
+		deltas : ['deltas'],
+	};
+
+	window.graphy.selectionFactory('Data set', 'dataset', makeSelItem(Object.keys(dataOptions), 'radio'));
+	$('#selectionContainer').on('ifClicked', 'input[name="dataset"]', function(event) {
+		removeMainSelections();
+		$('#datatype').remove();
+		window.graphy.selectionFactory('Data type', 'datatype', makeSelItem(dataOptions[this.value], 'radio'));
+		initiCheck('#datatype');
+		event.preventDefault();
+	});
+	$('#selectionContainer').on('ifClicked', 'input[name="datatype"]', function(event) {
+		removeMainSelections();
+		var dataset = $('input[name=dataset]:checked', '#dataset').val();
+		var datatype = this.value;
+		window.graphy.getData(dataset, datatype).done(function(data) {
+			createMainSelections(data);
+		});
+		event.preventDefault();
+	});
+	initiCheck('input');
 });
 </script>
 </head>
 <body>
 	<div class ="skin skin-flat">
 		<dl class ="clear">
-			<dd class ="selected">
-				<div class="skin-section">
-					<h4>X-Axis</h4>
-					<ul class ="list">
-						<li>
-							<input type="radio" id="radio-1" name="flat-radio">
-							<label for ="radio-1">Radio</label>
-						</li>
-					</ul>
-				</div>
-				<div class="skin-section">
-					<h4>Y1-Axis</h4>
-					<ul class ="list">
-						<li>
-							<input type="checkbox" id="checkbox-1">
-							<label for ="checkbox-1">Chaa</label>
-						</li>
-					</ul>
-				</div>
-				<div class="skin-section">
-					<h4>Y2-Axis</h4>
-					<ul class ="list">
-						<li>
-							<input type="checkbox" id="checkbox-1">
-							<label for ="checkbox-1">Chec1</label>
-						</li>
-					</ul>
-				</div>
-				<div class="skin-section">
-					<h4>Chart type</h4>
-					<ul class ="list">
-						<li>
-							<input type="radio" id="radio-2" name="flat-radio">
-							<label for ="radio-2">Raddd</label>
-						</li>
-							<li>
-							<input type="radio" id="radio-2" name="flat-radio">
-							<label for ="radio-2">Raddd</label>
-						</li>
-							<li>
-							<input type="radio" id="radio-2" name="flat-radio">
-							<label for ="radio-2">Raddd</label>
-						</li>
-					</ul>
-				</div>
-				<div class="skin-section">
-					<h4>Axis labels</h4>
-					<ul class ="list">
-						<li class="textInput">
-							<input class="textBox" type="textbox" placeholder="Title"></input>
-						</li>
-						<li class="textInput">
-							<input class="textBox" type="textbox" placeholder="Title"></input>
-						</li>
-						<li class="textInput">
-							<input class="textBox" type="textbox" placeholder="Title"></input>
-						</li>
-					</ul>
-				</div>
-				<div class="skin-section">
-					<h4>Options</h4>
-					<ul class ="list">
-						<li>
-							<input type="checkbox" id="checkbox-1">
-							<label for ="radio-2">Nssor</label>
-						</li>
-					</ul>
-				</div>
+			<dd class ="selected" id="selectionContainer">
 			</dd>
 		</dl>
 	</div>
-
-<div id='chartContainer'></div>
-
+	<div id='chartContainer'></div>
 </body>
 </html>
