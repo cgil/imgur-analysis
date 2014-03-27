@@ -76,7 +76,6 @@ def showHits():
 
 def exportDb():
 	patterns = ['hour', 'weekday', 'month', 'year', 'delta']
-	combo = []
 	imgur = {}
 	shots = {}
 	for p in patterns:
@@ -85,14 +84,15 @@ def exportDb():
 				found = db[col].find()
 				for res in found:
 					res['token'] = int(res['index'].split(p)[1])
-					shots[res['shotType']].append(res)
-				combo.append(shots)
-		for c in combo:
-			for item in c:
-				item.pop("_id", None)
-				item.pop("bestScore", None)
-		imgur[p] = combo
-		combo = []
+					res.pop("_id", None)
+					res.pop("bestScore", None)
+					try:
+						shots[res['shotType']].append(res)
+					except:
+						shots[res['shotType']] = [res]
+		# combo.append(shots)
+		imgur[p] = shots
+		shots = {}
 
 	with open('./export/imgur.json', 'w') as outfile:
 		json.dump(imgur, outfile)
