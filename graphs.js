@@ -3,10 +3,14 @@
 
 	var graphy = window.graphy = {};
 
-	graphy.data = {};
-	$.getJSON('./export/imgur.json', function(data) { 
-		graphy.data = data;
-	}); 
+	graphy.setData = function() {
+		var ret = new $.Deferred();
+		$.getJSON('./export/imgur.json', function(data) { 
+			graphy.data = data;
+			ret.resolve(true); 
+		}); 
+		return ret.promise();
+	};
 
 	graphy.getData = function(set, type, remote) {
 		var shot = '';
@@ -26,7 +30,20 @@
 		}
 		else {
 			set = set.replace(/s+$/, "");
-			return modifyData(graphy.data[set][shot], shot);
+			var ret = new $.Deferred();
+			if(typeof graphy.data === 'undefined' || $.isEmptyObject(graphy.data)) {
+				$.getJSON('./export/imgur.json', function(data) { 
+					graphy.data = data;
+					var modData = modifyData(graphy.data[set][shot], shot);
+					ret.resolve(modData); 
+				}); 
+			}
+			else {
+				var modData = modifyData(graphy.data[set][shot], shot);
+				ret.resolve(modData); 
+			}
+
+			return ret.promise();
 		}
 	};
 
@@ -83,7 +100,7 @@
 			xlabel = 'Time delta (hours)';
 
 			//	Deltas
-			get(api[chartType]('DeltaShot')).done(function(data) {
+			graphy.getData(chartType, 'deltas').done(function(data) {
 				for(var i in data) {
 					var totalMinutes = data[i]['token'] * 30;
 					data[i]['token'] = totalMinutes/60;
@@ -115,7 +132,7 @@
 			return;
 		}
 		//	Captions
-		get(api[chartType]('CaptionShot')).done(function(data) {
+		graphy.getData(chartType, 'comments').done(function(data) {
 			var id = chartType + '-CaptionShot';
 			var bulkContainer = id + '-container';
 			$('#chartContainer').append("<div class='bulkContainer' id='" + bulkContainer + "'></div>");
@@ -145,7 +162,7 @@
 		});
 
 		//	Images
-		get(api[chartType]('ImageShot')).done(function(data) {
+		graphy.getData(chartType, 'images').done(function(data) {
 			var id = chartType + '-ImageShot';
 			var bulkContainer = id + '-container';
 			$('#chartContainer').append("<div class='bulkContainer' id='" + bulkContainer + "'></div>");

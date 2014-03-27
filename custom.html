@@ -136,8 +136,9 @@ $(document).ready(function() {
 		removeMainSelections();
 		var dataset = $('input[name=dataset]:checked', '#dataset').val();
 		var datatype = this.value;
-		var data = window.graphy.getData(dataset, datatype);
-		createMainSelections(data);
+		window.graphy.getData(dataset, datatype).done(function(data) {
+			createMainSelections(data);
+		});
 		event.preventDefault();
 	});
 	//	y1axis and y2axis field cannot be enabled if field bound to xaxis
