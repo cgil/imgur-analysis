@@ -17,11 +17,6 @@
 	<script src="graphs.js"></script>
 <script>
 $(document).ready(function() {
-	var imgur = {};
-	$.getJSON('./export/imgur.json', function(data) { 
-		imgur = data;
-		window.console.dir(imgur);
-	}); 
 
 	var SELECTIONS = {};
 	//	Initialize iCheck
@@ -141,9 +136,8 @@ $(document).ready(function() {
 		removeMainSelections();
 		var dataset = $('input[name=dataset]:checked', '#dataset').val();
 		var datatype = this.value;
-		window.graphy.getData(dataset, datatype).done(function(data) {
-			createMainSelections(data);
-		});
+		var data = window.graphy.getData(dataset, datatype);
+		createMainSelections(data);
 		event.preventDefault();
 	});
 	//	y1axis and y2axis field cannot be enabled if field bound to xaxis

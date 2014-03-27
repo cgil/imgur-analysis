@@ -3,7 +3,12 @@
 
 	var graphy = window.graphy = {};
 
-	graphy.getData = function(set, type) {
+	graphy.data = {};
+	$.getJSON('./export/imgur.json', function(data) { 
+		graphy.data = data;
+	}); 
+
+	graphy.getData = function(set, type, remote) {
 		var shot = '';
 		if(type === 'comments') {
 			shot = 'CaptionShot';
@@ -14,9 +19,15 @@
 		else {
 			shot = 'DeltaShot';
 		}
-		return get(api[set](shot)).then(function(data) {
-			return modifyData(data, shot);
-		});
+		if(remote === true) {
+			return get(api[set](shot)).then(function(data) {
+				return modifyData(data, shot);
+			});
+		}
+		else {
+			set = set.replace(/s+$/, "");
+			return modifyData(graphy.data[set][shot], shot);
+		}
 	};
 
 	graphy.selectionFactory = function(title, id, data) {
