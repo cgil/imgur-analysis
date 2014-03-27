@@ -75,7 +75,7 @@ def showHits():
 		pprint(old)
 
 def exportDb():
-	patterns = ['hour']
+	patterns = ['hour', 'weekday', 'month', 'year', 'delta']
 	combo = []
 	imgur = {}
 	for p in patterns:
