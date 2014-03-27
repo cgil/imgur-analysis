@@ -3,6 +3,7 @@ from pprint import pprint
 import datetime
 from bson.objectid import ObjectId
 import os
+import json
 
 def main():
 	foundHits = hits.find()
@@ -73,6 +74,26 @@ def showHits():
 		old = hit['data']['image']
 		pprint(old)
 
+def exportDb():
+	patterns = ['hour']
+	combo = []
+	imgur = {}
+	for p in patterns:
+		for col in db.collection_names():
+			if col.find(p) != -1:
+				found = db[col].find()
+				for res in found:
+					res['token'] = int(res['index'].split(p)[1])
+					combo.append(res)
+		for item in combo:
+			item.pop("_id", None)
+			item.pop("bestScore", None)
+		imgur[p] = combo
+		combo = []
+
+	with open('./export/imgur.json', 'w') as outfile:
+		json.dump(imgur, outfile)
+
 def log(message):
 	#	Only keep last 20mb of logs, trash the rest
 	size = os.stat('log.txt').st_size
@@ -88,6 +109,6 @@ def log(message):
 client = MongoClient()
 db = client.imgur
 hits = db.hits
-main()
+exportDb()
 
 
