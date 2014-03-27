@@ -17,7 +17,7 @@
 	<script src="graphs.js"></script>
 <script>
 $(document).ready(function() {
-	var SELECTIONS = [];
+	var SELECTIONS = {};
 	//	Initialize iCheck
 	var initiCheck = function(sel) {
 		$(sel).iCheck({
@@ -29,19 +29,19 @@ $(document).ready(function() {
 	//	Form the selections object
 	var setSelections = function(data) {
 		var fields = Object.keys(data[0]);
-		var chartTypes = ['line', 'timeseries', 'spline', 'bar', 'scatter', 'pie', 'donut', 'area', 'area-spline'];
-		var axisLabelPlaceholders = ['title', 'x-Axis-label', 'y1-Axis-label', 'y2-Axis-label'];
+		var chartTypes = ['line', 'spline', 'bar', 'scatter', 'pie', 'donut', 'area', 'area-spline'];
+		var axisLabelPlaceholders = ['title', 'x-axis-label', 'y1-axis-label', 'y2-axis-label'];
 		var options = ['normalized'];
-		SELECTIONS = [
-			{ name: 'x-Axis', id: 'xaxis', items: makeSelItem(fields, 'radio') },
-			{ name: 'y1-Axis', id: 'y1axis', items: makeSelItem(fields, 'checkbox') },
-			{ name: 'y2-Axis', id: 'y2axis', items: makeSelItem(fields, 'checkbox') },
-			{ name: 'Chart type', id: 'charttype', items: makeSelItem(chartTypes, 'radio') },
-			{ name: 'Options', id: 'options', items: makeSelItem(options, 'checkbox') },
-			{ name: 'Axis labels', id: 'axislabels', 
+		SELECTIONS = {
+			'xaxis': { name: 'x-Axis', items: makeSelItem(fields, 'radio') },
+			'y1axis': { name: 'y1-Axis', items: makeSelItem(fields, 'checkbox') },
+			'y2axis': { name: 'y2-Axis', items: makeSelItem(fields, 'checkbox') },
+			'charttype': { name: 'Chart type', items: makeSelItem(chartTypes, 'radio') },
+			'options': { name: 'Options', items: makeSelItem(options, 'checkbox') },
+			'axislabels': { name: 'Axis labels', id: 'axislabels', 
 				items: axisLabelPlaceholders.map(function(d) { return { name: d, placeholder: d, type: 'text' }; }) },
-			{ name: 'Generate graph', id: 'generate', items: [{type: 'button', name: 'Go!'}] }
-		];
+			'generate': { name: 'Generate graph', items: [{type: 'button', name: 'Go!'}] }
+		};
 		return SELECTIONS;
 	};
 
@@ -52,46 +52,65 @@ $(document).ready(function() {
 
 	//	Remove all of the selections
 	var removeMainSelections = function() {
-		for(var i in SELECTIONS) {
-			$('#'+SELECTIONS[i]['id']).remove();	
+		for(var key in SELECTIONS) {
+			$('#'+key).remove();	
 		}
 	};
 
 	var getSelections = function() {
-		for(var i in SELECTIONS) {
-			var sel = SELECTIONS[i];
+		var selObj = {};
+		for(var key in SELECTIONS) {
+			var sel = SELECTIONS[key];
 			if(typeof sel['items'] === 'undefined' || sel['items'].length === 0)
 				continue;
-			// if(sel.items[0]['type'] === 'radio') {
-			// 	var val = $('input[name='+ sel['id'] +']:checked', '#' + sel['id']).val();
-			// }
-			// else if(sel.items[0]['type'] === 'checkbox') {
-			// 	var val = $('#' + sel['id'] + ' input:checked').map(function(i, el){ return el.value; }).get(); 
-			// }
-			if(sel.items[0]['type'] === 'text') {
-				var val = $('#' + sel['id'] + ' input').val();
+			if(sel.items[0]['type'] === 'radio') {
+				var found = $('input[name='+ key +']:checked', '#' + key).val();
+				if(typeof found !== 'undefined') {
+					var val = [$('input[name='+ key +']:checked', '#' + key).val()]
+				}
+				else {
+					var val = [];
+				}
 			}
-			if(typeof val !== 'undefined' && val.length !== 0 && val !== '') {
-				window.console.log(sel['id'] + ' ' + val);
-				window.console.log(val);
+			else if(sel.items[0]['type'] === 'checkbox') {
+				var val = $('#' + key + ' input:checked').map(function(i, el){ return el.value; }).get() || []; 
+			}
+			else if(sel.items[0]['type'] === 'text') {
+				var val = {};
+				$('#' + key).find(":input").each(function() {
+				    val[this.placeholder] = this.value;
+				}).get();
+			}
+			else {
+				var val = [];
+			}
+
+			if(key !== 'generate') {
+				selObj[key] = val;
 			}
 		}
+		return selObj;
 	};
 
 	var createMainSelections = function(data) {
-
 		if(typeof data === 'undefined' || data.length === 0)
 			return;
 		var sels = setSelections(data);
 		for(var i in sels) {
-			window.graphy.selectionFactory(sels[i]['name'], sels[i]['id'], sels[i]['items']);
+			window.graphy.selectionFactory(sels[i]['name'], i, sels[i]['items']);
 		}
 		initiCheck('input');
 		$('#selectionContainer').on('click', '.button', function(event) {
 			var dataset = $('input[name=dataset]:checked', '#dataset').val();
 			var datatype = $('input[name=datatype]:checked', '#datatype').val();
-			// window.graphy.generate(data, 'custom', 'custom-chart', fields, chartType, axisLabels, normalized, axes);
-			getSelections();
+			var selections = getSelections();
+			var graphOptions = {
+				size: {
+					height: 400,
+					width: 1000
+				}
+			};
+			window.graphy.generate(data, 'custom', 'customChart', selections, graphOptions);
 			event.preventDefault();
 		});
 	};
@@ -101,7 +120,7 @@ $(document).ready(function() {
 		weekdays : ['comments', 'images'],
 		months : ['comments', 'images'],
 		years : ['comments', 'images'],
-		deltas : ['deltas'],
+		deltas : ['deltas']
 	};
 
 	window.graphy.selectionFactory('Data set', 'dataset', makeSelItem(Object.keys(dataOptions), 'radio'));
@@ -121,6 +140,36 @@ $(document).ready(function() {
 		});
 		event.preventDefault();
 	});
+	//	y1axis and y2axis field cannot be enabled if field bound to xaxis
+	$('#selectionContainer').on('ifChecked', '#xaxis input[name="xaxis"]', function(event) {
+		$('#' + this.id.replace('xaxis', 'y1axis')).iCheck('disable');
+		$('#' + this.id.replace('xaxis', 'y1axis')).iCheck('uncheck');
+		$('#' + this.id.replace('xaxis', 'y2axis')).iCheck('disable');
+		$('#' + this.id.replace('xaxis', 'y2axis')).iCheck('uncheck');
+
+		event.preventDefault();
+	});
+	$('#selectionContainer').on('ifUnchecked', '#xaxis input[name="xaxis"]', function(event) {
+		$('#' + this.id.replace('xaxis', 'y1axis')).iCheck('enable');
+		$('#' + this.id.replace('xaxis', 'y2axis')).iCheck('enable');
+
+		event.preventDefault();
+	});
+	$('#selectionContainer').on('ifToggled', '#y1axis', function(event) {
+		//	y2-axis fields can't be selected if analog y1-axis fields are selected
+		var uncheckedIds = $('#y1axis input:checkbox:not(:checked)')
+			.map(function(i, el) { return el.id.replace('y1axis', 'y2axis'); }).get();
+		var checkedIds = $('#y1axis input:checked')
+			.map(function(i, el) { return el.id.replace('y1axis', 'y2axis'); }).get();
+		for(u in uncheckedIds) {
+			$('#' + uncheckedIds[u]).iCheck('enable');
+		}
+		for(var c in checkedIds) {
+			$('#' + checkedIds[c]).iCheck('disable');
+			$('#' + checkedIds[c]).iCheck('uncheck');
+		}
+		event.preventDefault();
+	});
 	initiCheck('input');
 });
 </script>
@@ -132,6 +181,8 @@ $(document).ready(function() {
 			</dd>
 		</dl>
 	</div>
-	<div id='chartContainer'></div>
+	<div id='chartContainer'>
+		<div class='bulkContainer' id='customChart'></div>
+	</div>
 </body>
 </html>

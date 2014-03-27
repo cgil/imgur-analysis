@@ -311,55 +311,69 @@
 	};
 
 
-	graphy.generate = function(data, chartId, bulkContainer, fields, chartType, axisLabels, normalized, axes) {
-		if(typeof axes === 'undefined') {
-			axes = {};
+	graphy.generate = function(data, chartId, bulkContainer, selections, options) {
+		$('#' + bulkContainer).empty();
+		var fields = $.unique(selections['xaxis'].concat(selections['y1axis'], selections['y2axis']));
+		var axes = {};
+		for(var s in selections['y1axis']) {
+			axes[selections['y1axis'][s]] = 'y';
 		}
+		for(var s2 in selections['y2axis']) {
+			axes[selections['y2axis'][s2]] = 'y2';
+		}
+
 		//	Restructure data to [['field1', val1, val2, ...], ...]
 		var cols = new Array(fields.length);
+		var normalized = false;
+		if($.inArray('normalized', selections['options']) > -1) {
+			normalized = true;
+		}
 		for(var i in data) {
 			for(var j in fields) {
 				if(typeof cols[j] === 'undefined') {
 					cols[j] = [fields[j]];
 				}
 				var val = data[i][fields[j]];
-				if(normalized === true && fields[j] !== 'token') {
+				if(normalized === true && fields[j] !== selections['xaxis'][0]) {
 					val = normalize(val, 0, d3.max(data, function(d) { return d[fields[j]]; }));
 				}
 				cols[j].push(val);
 			}
 		}
-
-		$('#' + bulkContainer).append("<div class='chartBlock'><span class='chartTitle'>" + axisLabels[0] + 
+		$('#' + bulkContainer).append("<div class='chartBlock'><span class='chartTitle'>" + selections['axislabels']['title'] + 
 			"</span><div class='chart' id='" + chartId + "'></div></div>");
 		var chart = c3.generate({
 			bindto: '#' + chartId,
 			data: {
-				x: 'token',
+				x: selections['xaxis'][0],
 				columns: cols,
-				type: chartType,
-				axes: axes			},
+				type: selections['charttype'][0] || 'line',
+				axes: axes			
+			},
 			axis: {
 				x: {
-					label: axisLabels[1]		
+					label: selections['axislabels']['x-axis-label']		
 				},
 				y: {
-					label: axisLabels[2]
+					label: selections['axislabels']['y1-axis-label']
 				},
 				y2: {
-					show: true
+					show: selections['y2axis'].length > 0 ? true : false,
+					label: selections['axislabels']['y2-axis-label']
 				}
 			},
 			color: {
 				pattern: fields.map(stringToColor)
 			},
-			size: {
-				height: 240,
-				width: 480
-			},
-			tooltip: {
-				show: false
-			}
+			size: options['size'] ? options['size'] : 
+				{
+					height: 240,
+					width: 480
+				},
+			tooltip: options['tooltip'] ? options['size'] :
+				{
+					show: false
+				}
 		});
 	};
 
