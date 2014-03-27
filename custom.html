@@ -17,6 +17,12 @@
 	<script src="graphs.js"></script>
 <script>
 $(document).ready(function() {
+	var imgur = {};
+	$.getJSON('./export/imgur.json', function(data) { 
+		imgur = data;
+		window.console.dir(imgur);
+	}); 
+
 	var SELECTIONS = {};
 	//	Initialize iCheck
 	var initiCheck = function(sel) {
