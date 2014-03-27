@@ -78,16 +78,19 @@ def exportDb():
 	patterns = ['hour', 'weekday', 'month', 'year', 'delta']
 	combo = []
 	imgur = {}
+	shots = {}
 	for p in patterns:
 		for col in db.collection_names():
 			if col.find(p) != -1:
 				found = db[col].find()
 				for res in found:
 					res['token'] = int(res['index'].split(p)[1])
-					combo.append(res)
-		for item in combo:
-			item.pop("_id", None)
-			item.pop("bestScore", None)
+					shots[res['shotType']].append(res)
+				combo.append(shots)
+		for c in combo:
+			for item in c:
+				item.pop("_id", None)
+				item.pop("bestScore", None)
 		imgur[p] = combo
 		combo = []
 
