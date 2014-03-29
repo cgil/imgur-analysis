@@ -500,7 +500,7 @@
 		//	Closing remarks -6
 		infos.push(
 			"<p>" +
-			"Hope you found this interesting! If you want to have some fun with the data and make some pretty graphs. <br/>" +
+			"Hope you found this interesting! If you want, have some fun with the data and make some pretty graphs! <br/>" +
 			"Go here: <a href='" + customLink + "'> <strong>make pretty graphs </strong></a>" +
 			"</p>"
 		);
