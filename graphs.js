@@ -426,11 +426,12 @@
 	graphy.addInfo = function(i, id) {
 		var infos = [];
 		var customLink = window.location.origin + window.location.pathname + "custom.html";
+		var infoLink = window.location.origin + window.location.pathname + "info.html";
 		//	Graph info -0
 		infos.push(
 			"<p>" +
 			"The visualizations below are a representations of the <strong>imgur</strong> data set over the past 4 years. <br/>" + 
-			"Check out some of my graphs or create your own <a href='" + customLink + "'> <strong>pretty graphs </strong></a> <br/><br/>" + 
+			"Check out some of my graphs or create your own <a href='" + customLink + "'>pretty graphs</a> <br/><br/>" + 
 			"<strong>Important terms:</strong>" +
 			"</p>" +
 			"<ul>" +
@@ -440,17 +441,20 @@
 			"<li><div class='tab'>animated</div> : whether the image posted is animated </li>" +
 			"<li><div class='tab'>data/counter</div> : the given data type (points, ups...) divided by the counter for the given time period. </li>" +
 			"<li><div class='tab'>token</div> : a time lapse (hours, weekdays, months, years) </li>" +
-			"</ul>"
+			"</ul> <br/>" +
+			"<p>" +
+			"<strong>Still confused?</strong> Get more information on the project here: " + "<a href='" + infoLink + "'>help I'm lost!</a> <br/><br/>" +
+			"</p>"
+
 
 		);
 		//	Hours -1
 		infos.push(
 			"<p>" +
 			"<strong>Data grouping by hour.</strong> <br/>" +
-			"It's interesting to note how much imgur is used during the work day. <br/>" + 
-			"There's a steady increase in activity between 9am - 5pm. <br/>" +
+			"Drop those TPS reports and jump on imgur. You can't make it through a 9 to 5 day without it! <br/>" + 
 			"The highest amount of points are given for posts at 5pm, <strong>but</strong> data/counter shows that you should... <br/>" +
-			"<strong>Post at 11 am!</strong> 11 am is your best bet at maximizing points." +
+			"<strong>Post at 11 am!</strong> 11 am is your best bet at <strong>maximizing points.</strong>" +
 			"</p>" 
 		);
 		//	Weekdays -2
@@ -459,8 +463,8 @@
 			"<strong>Data grouping by weekdays. Where 0=Monday and 6=Sunday</strong> <br/>" +
 			"Imgur is the <strong>lifeblood</strong> of the work week! <br/>" +
 			"We can see a steady use over the weekdays and a sharp decline of use starting on Fridays and spiking again on Sundays. <br/>" +
-			"This leaves Saturdays as the day imgurians risk venturing into the outside world. <br/>" +
-			"To <strong>maximize points</strong>: post comments on Sundays and post new images on Wednesdays." +
+			"This leaves Saturdays as the day <strong>imgurians risk venturing into the outside world.</strong> <br/>" +
+			"To maximize points you should <strong>post comments on Sundays and post new images on Wednesdays.</strong>" +
 			"</p>"
 		);
 		//	Months -3
@@ -479,7 +483,7 @@
 			"Help! Imgur is expanding out of control! <br/>" +
 			"From 2011 to 2013, there are <strong>10x more comments</strong> posted per year and <strong>2x more images</strong> posted per year. <br/>" +
 			"In 2013 alone, over 72,000 images were posted. <br/>" +
-			"Best of all, points per post are reaching records highs! Making <strong>every day the best day to make a new post!</strong>" +
+			"Best of all, points per post are reaching record highs! Making <strong>every day the best day to make a new post!</strong>" +
 			"</p>"
 		);
 		//	Deltas -5
