@@ -7,6 +7,10 @@ Then we use d3 http://d3js.org/ to visualize the data and form graphs. <br/>
 
 custom.html and custom.js introduce extended functionality that allows the creation of custom graphs on the fly.
 </p>
+<p>
+Running scraper.py initiates the scraper. <br/>
+dbJobs.py contains miscellanious operations and debugging functions on the database.
+</p>
 
 <p>
 Dependencies: 
