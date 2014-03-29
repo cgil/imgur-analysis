@@ -434,7 +434,7 @@
 			"There are 5 data sets (or groupings) for which I collected data. <br/>" + 
 			"These are: <strong>hours, weekdays, months, years, and deltas</strong> <br/>" +
 			"Additionally there are 3 data types: <strong>images, comments, and deltas</strong> <br/>" +
-			"Terms: <br/>" +
+			"Terms: <br/> <br/>" +
 			"-deltas: time difference between an image being posted and a comment associated with that image <br/>" +
 			"-counter: total number of items posted (image or post) <br/>" +
 			"-reddit : whether the image posted came from reddit <br/>" +
