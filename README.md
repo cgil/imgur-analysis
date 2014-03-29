@@ -9,7 +9,9 @@ custom.html and custom.js introduce extended functionality that allows the creat
 </p>
 <p>
 Running scraper.py initiates the scraper. <br/>
-dbJobs.py contains miscellanious operations and debugging functions on the database.
+dbJobs.py contains miscellanious operations and debugging functions on the database. <br/>
+You can also export all collections into a usable json object from dbJobs.py. <br/>
+The visualizer can pull data directly from your api endpoint or from the exported json object.
 </p>
 
 <p>
