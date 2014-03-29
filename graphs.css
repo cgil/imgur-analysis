@@ -58,14 +58,26 @@
 	text-align: left;
 	float: left;
 	clear: both;
-	width: 100%;
 	margin-bottom: 10px;
-}
-.info > p {
 	padding: 40px;
+	width: 100%;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
+
+.tab {
+	width: 100px;
+	display: inline-block;
+}
+
+strong {
+	color: orange;
+}
+
 
 .info a:link {color:#DF821E;}      /* unvisited link */
 .info a:visited {color:#CE7515;}  /* visited link */
 .info a:hover {color:#AC5C07;}  /* mouse over link */
 .info a:active {color:#DB8D39;}  /* selected link */
+
