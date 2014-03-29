@@ -108,26 +108,29 @@
 				var id = chartType + '-DeltaShot';
 				var bulkContainer = id + '-container';
 				$('#chartContainer').append("<div class='bulkContainer' id='" + bulkContainer + "'></div>");
+				graphy.addInfo(5, '#'+bulkContainer);
 				data = modifyData(data, 'DeltaShot');
 				//	All data
 				generateChart(data, id+'-all', bulkContainer, ['token', 'counter', 'points', 'ups', 'downs'], 
-					'spline', ['Aggregate of comment points by ' + chartType, xlabel, 'Values'], false);
+					'spline', ['Comment data by ' + chartType, xlabel, 'Values'], false);
 				// Multi-axis all data
 				axes = {
 					counter: 'y2',
 					downs: 'y2'
 				};
 				generateChart(data, id+'-multi', bulkContainer, ['token', 'counter', 'points', 'ups', 'downs'], 
-					'spline', ['Aggregate of comment data by ' + chartType + ' multi-axis', xlabel, 'Values'], false, axes);
+					'spline', ['Comment data by ' + chartType + ' multi-axis', xlabel, 'Values'], false, axes);
 				//	Normalized data
 				generateChart(data, id+'-norm', bulkContainer, ['token', 'counter', 'points', 'ups', 'downs'], 
 					'spline', ['Normalized comment data by ' + chartType, xlabel, 'Values (normalized)'], true);
 				//	Data per counter
 				generateChart(data, id+'-ppc', bulkContainer, ['token', 'pointsPerCounter', 'upsPerCounter', 'downsPerCounter'], 
-					'spline', ['Aggregate comment data/counter by ' + chartType, xlabel, 'Values/Counter'], false);
+					'spline', ['Comment data/counter by ' + chartType, xlabel, 'Values/Counter'], false);
 				//	Data per counter normalized
 				generateChart(data, id+'-norm-ppc', bulkContainer, ['token', 'pointsPerCounter', 'upsPerCounter', 'downsPerCounter'], 
 					'spline', ['Normalized comment data/counter by ' + chartType, xlabel, 'Values/Counter (normalized)'], true);
+
+				graphy.addInfo(6, '#chartContainer');
 			});
 			return;
 		}
@@ -135,18 +138,32 @@
 		graphy.getData(chartType, 'comments').done(function(data) {
 			var id = chartType + '-CaptionShot';
 			var bulkContainer = id + '-container';
+			var infoIndex = 1;
 			$('#chartContainer').append("<div class='bulkContainer' id='" + bulkContainer + "'></div>");
+			if(chartType === 'hours') {
+				infoIndex = 1;
+			}
+			else if(chartType === 'weekdays') {
+				infoIndex = 2;
+			}
+			else if(chartType === 'months') {
+				infoIndex = 3;
+			}
+			else if(chartType === 'years') {
+				infoIndex = 4;
+			}
+			graphy.addInfo(infoIndex, '#'+bulkContainer);
 			data = modifyData(data, 'CaptionShot');
 			//	All data
 			generateChart(data, id+'-all', bulkContainer, ['token', 'counter', 'points', 'ups', 'downs'], 
-				'spline', ['Aggregate of comment points by ' + chartType, xlabel, 'Values'], false);
+				'spline', ['Comment data by ' + chartType, xlabel, 'Values'], false);
 			// Multi-axis all data
 			axes = {
 				counter: 'y2',
 				downs: 'y2'
 			};
 			generateChart(data, id+'-multi', bulkContainer, ['token', 'counter', 'points', 'ups', 'downs'], 
-				'spline', ['Aggregate of comment data by ' + chartType + ' multi-axis', xlabel, 'Values'], false, axes);
+				'spline', ['Comment data by ' + chartType + ' multi-axis', xlabel, 'Values'], false, axes);
 			//	Normalized data
 			generateChart(data, id+'-norm', bulkContainer, ['token', 'counter', 'points', 'ups', 'downs'], 
 				'spline', ['Normalized comment data by ' + chartType, xlabel, 'Values (normalized)'], true);
@@ -155,7 +172,7 @@
 				downsPerCounter: 'y2'
 			};
 			generateChart(data, id+'-ppc', bulkContainer, ['token', 'pointsPerCounter', 'upsPerCounter', 'downsPerCounter'], 
-				'spline', ['Aggregate comment data/counter by ' + chartType, xlabel, 'Values/Counter'], false, axes);
+				'spline', ['Comment data/counter by ' + chartType, xlabel, 'Values/Counter'], false, axes);
 			//	Data per counter normalized
 			generateChart(data, id+'-norm-ppc', bulkContainer, ['token', 'pointsPerCounter', 'upsPerCounter', 'downsPerCounter'], 
 				'spline', ['Normalized comment data/counter by ' + chartType, xlabel, 'Values/Counter (normalized)'], true);
@@ -169,7 +186,7 @@
 			data = modifyData(data, 'ImageShot');
 			//	All data
 			generateChart(data, id+'-all', bulkContainer, ['token', 'counter', 'points', 'ups', 'downs', 'views', 'virality', 'score'], 
-				'spline', ['Aggregate of image points by ' + chartType, xlabel, 'Values'], false);
+				'spline', ['Image data by ' + chartType, xlabel, 'Values'], false);
 			// Multi-axis all data
 			axes = {
 				counter: 'y2',
@@ -180,10 +197,10 @@
 				score: 'y2'
 			};
 			generateChart(data, id+'-multi', bulkContainer, ['token', 'counter', 'points', 'ups', 'downs', 'views', 'virality', 'score'], 
-				'spline', ['Aggregate of image points by ' + chartType + ' multi-axis', xlabel, 'Values'], false, axes);
+				'spline', ['Image data by ' + chartType + ' multi-axis', xlabel, 'Values'], false, axes);
 			//	Alt data
 			generateChart(data, id+'-alt', bulkContainer, ['token', 'reddit', 'animated'], 
-				'spline', ['Aggregate of alt data by ' + chartType, xlabel, 'Values'], false);
+				'spline', ['Alt data by ' + chartType, xlabel, 'Values'], false);
 			//	Normalized data
 			generateChart(data, id+'-norm', bulkContainer, ['token', 'counter', 'points', 'ups', 'downs', 'views', 'virality', 'score'], 
 				'spline', ['Normalized image data by ' + chartType, xlabel, 'Values (normalized)'], true);
@@ -196,7 +213,7 @@
 				scorePerCounter: 'y2'
 			};
 			generateChart(data, id+'-ppc', bulkContainer, ['token', 'pointsPerCounter', 'upsPerCounter', 'downsPerCounter', 'viewsPerCounter', 'viralityPerCounter', 'scorePerCounter'], 
-				'spline', ['Aggregate comment data/counter by ' + chartType, xlabel, 'Values/Counter'], false, axes);
+				'spline', ['Comment data/counter by ' + chartType, xlabel, 'Values/Counter'], false, axes);
 			//	Data per counter normalized
 			generateChart(data, id+'-norm-ppc', bulkContainer, ['token', 'pointsPerCounter', 'upsPerCounter', 'downsPerCounter', 'viewsPerCounter', 'viralityPerCounter', 'scorePerCounter'], 
 				'spline', ['Normalized image data/counter by ' + chartType, xlabel, 'Values/Counter (normalized)'], true);
@@ -403,6 +420,75 @@
 					show: false
 				}
 		});
+	};
+
+	graphy.addInfo = function(i, id) {
+		var infos = [];
+		var customLink = window.location.origin + window.location.pathname + "custom.html";
+		//	Graph info -0
+		infos.push(
+			"The visualizations below are a representations of the <strong>imgur</strong> data set, acquired by scraping their public site. <br/>" + 
+			"Using these graphs I tried to find interesting correlations in the data over different time periods. <br/>" +
+			"A lot of assumptions have been made, most importantly that most users are in the U.S. <br/>" +
+			"This new data set is a simple aggregate of points, ups, downs and so on over the past 4 years (2011-March 2014). <br/>" +
+			"There are 5 data sets (or groupings) for which I collected data. <br/>" + 
+			"These are: <strong>hours, weekdays, months, years, and deltas</strong> <br/>" +
+			"Additionally there are 3 data types: <strong>images, comments, and deltas</strong> <br/>" +
+			"Terms: <br/>" +
+			"-deltas: time difference between an image being posted and a comment associated with that image <br/>" +
+			"-counter: total number of items posted (image or post) <br/>" +
+			"-reddit : whether the image posted came from reddit <br/>" +
+			"-animated: whether the image posted is animated <br/>" +
+			"-data/counter: the given data type (points, ups...) divided by the counter for the given time period. <br/>" +
+			"-token: a time lapse (hours, weekdays, months, years) <br/>" +
+			"Jump into the data below or create your own <a href='" + customLink + "'> <strong>custom graphs </strong></a>"
+		);
+		//	Hours -1
+		infos.push(
+			"<strong>Data grouping by hour.</strong> <br/>" +
+			"It's interesting to note how much imgur is used during the work day. " + 
+			"Check out how there's a steady increase in activity between 9am - 5pm. <br/>" +
+			"Additionally, although the highest amount of points are given for posts at 5pm, <br/>" +
+			"data/counter shows that 11am is your best bet at maximizing points, as the total points per post peaks."
+		);
+		//	Weekdays -2
+		infos.push(
+			"<strong>Data grouping by weekdays. Where 0=Monday and 6=Sunday</strong> <br/>" +
+			"This is great, showing how important imgur is for our surival during the weekdays. <br/>" +
+			"We can see a steady use over the weekdays and a sharp decline of use starting on Fridays and spiking again on Sundays. <br/>" +
+			"This leaves Saturdays as the day imgurians risk venturing into the outside world. <br/>" +
+			"To maximize points: post comments on Sundays and post new images on Wednesdays."
+		);
+		//	Months -3
+		infos.push(
+			"<strong>Data grouping by months. Where 1=January and 12=December</strong> <br/>" +
+			"Imgur users hate the cold, with overall use almost doubling during winter months compared to summer. <br/>" +
+			"Lesson learned: Follow the trend and go outside during summer! It seems as if the heat makes imgurians grouchy with downs/counter spiking in July."
+		);
+		//	Years -4
+		infos.push(
+			"<strong>Data grouping by years.</strong> <br/>" +
+			"It's pretty amazing to see how much imgur has grown in a few short years. <br/>" +
+			"From 2011 to 2013, there are 10x more comments posted per year and 2x more images posted per year. <br/>" +
+			"In 2013 alone, over 72,000 images were posted. <br/>" +
+			"Best of all points per post is increasing almost linearly over the years, making every day the best day to make a new post."
+		);
+		//	Deltas -5
+		infos.push(
+			"<strong>Data grouping by deltas. Or, time difference between an image being posted and a comment on that image being posted. <br/>" +
+			"Where 0=immediately after, 22=22 hours after the image was posted, and 23=23 hours through infinity <br/>" +
+			"We can immediately see that to maximize points on your comments you need to post a comment within the first hour <br/>" +
+			"of a new image being posted. <br/>" +
+			"After 6 hours of a new image being posted, commenting on that image is no longer an efficient way to earn points."
+
+		);
+		//	Closing remarks -6
+		infos.push(
+			"Feel free to play with the data and make your own custom graphs! <br/>" +
+			"Both can be found here: <a href='" + customLink + "'> <strong>custom graphs </strong></a>"
+		);
+		var elems = '<div class="info"><p>' + infos[i] + '</p></div>';
+		$(id).append(elems);
 	};
 
 

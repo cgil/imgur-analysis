@@ -52,3 +52,20 @@
 	resize: none;
 	height: 18px;
 }
+.info {
+	background-color: rgb(46, 46, 43);
+	color: white;
+	text-align: left;
+	float: left;
+	clear: both;
+	width: 100%;
+	margin-bottom: 10px;
+}
+.info > p {
+	padding: 40px;
+}
+
+.info a:link {color:#DF821E;}      /* unvisited link */
+.info a:visited {color:#CE7515;}  /* visited link */
+.info a:hover {color:#AC5C07;}  /* mouse over link */
+.info a:active {color:#DB8D39;}  /* selected link */
