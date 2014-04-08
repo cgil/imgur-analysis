@@ -502,8 +502,7 @@
 			"<p>" +
 			"Hope you found this interesting! If you want, have some fun with the data and make some pretty graphs! <br/>" +
 			"Go here: <a href='" + customLink + "'> <strong>make pretty graphs </strong></a>" +
-			"</p>" +
-			"<a href='https://twitter.com/share' class='twitter-share-button' data-via='dotgil'>Tweet</a>" 
+			"</p>" 
 		);
 		var elems = '<div class="info">' + infos[i] + '</div>';
 		$(id).append(elems);
