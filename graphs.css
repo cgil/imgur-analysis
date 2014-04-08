@@ -103,5 +103,7 @@ strong {
 	margin-left:20px;
 	float: left;
 	clear: both;
+	background: inherit !important;
+	padding: 0 !important; 
 }
 
