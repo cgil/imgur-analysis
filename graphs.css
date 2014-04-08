@@ -81,13 +81,18 @@ strong {
 .info a:hover {color:#AC5C07;}  /* mouse over link */
 .info a:active {color:#DB8D39;}  /* selected link */
 
-.ghLogo {
+.ghLogo, .dgLogo {
 	height: 32px;
 	position: absolute;
 	top: 13px;
 	right: 13px;
 }
-.ghLogo > a {
+
+.dgLogo {
+	left: 13px;
+}
+
+.ghLogo > a, .dgLogo > a {
 	border-style: none;
 }
 .git-icon {
