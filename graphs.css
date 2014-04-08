@@ -99,3 +99,9 @@ strong {
 	height: 32px;
 }
 
+.social {
+	margin-left:20px;
+	float: left;
+	clear: both;
+}
+
